@@ -366,62 +366,65 @@ get_local_ips_ioctl(gboolean include_loopback) {
 }
 
 static guint
-get_local_if_index_by_addr_ioctl (NiceAddress *addr)
-{
-  gint sockfd;
-  gint size = 0;
-  struct ifreq *ifr;
-  struct ifconf ifc;
-  guint if_index = 0;
+get_local_if_index_by_addr_ioctl(NiceAddress *addr) {
+#if 0
+    gint sockfd;
+    gint size = 0;
+    struct ifreq *ifr;
+    struct ifconf ifc;
+    guint if_index = 0;
 
-  if ((sockfd = socket (AF_INET, SOCK_DGRAM, IPPROTO_IP)) < 0) {
-    nice_debug ("error : Cannot open socket to retrieve interface list");
+    if ((sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP)) < 0) {
+        nice_debug("error : Cannot open socket to retrieve interface list");
+        return 0;
+    }
+
+    ifc.ifc_len = 0;
+    ifc.ifc_req = NULL;
+
+    /* Loop and get each interface the system has, one by one... */
+    do {
+        size += sizeof(struct ifreq);
+        /* realloc buffer size until no overflow occurs  */
+        if (NULL == (ifc.ifc_req = realloc(ifc.ifc_req, size))) {
+            nice_debug("Error : Out of memory while allocation interface"
+                       "configuration structure");
+            close(sockfd);
+            return 0;
+        }
+        ifc.ifc_len = size;
+
+        if (ioctl(sockfd, SIOCGIFCONF, &ifc)) {
+            perror("ioctl SIOCFIFCONF");
+            close(sockfd);
+            free(ifc.ifc_req);
+            return 0;
+        }
+    } while (size <= ifc.ifc_len);
+
+
+    /* Loop throught the interface list and get the IP address of each IF */
+    for (ifr = ifc.ifc_req;
+         (gchar *) ifr < (gchar *) ifc.ifc_req + ifc.ifc_len;
+         ++ifr) {
+        NiceAddress *myaddr = (NiceAddress *) &ifr->ifr_addr;
+
+        if (!nice_address_equal_no_port(myaddr, addr))
+            continue;
+        if (ifr->ifr_ifindex == 0)
+            continue;
+
+        if_index = ifr->ifr_ifindex;
+        break;
+    }
+
+    free(ifc.ifc_req);
+    close(sockfd);
+
+    return if_index;
+#else
     return 0;
-  }
-
-  ifc.ifc_len = 0;
-  ifc.ifc_req = NULL;
-
-  /* Loop and get each interface the system has, one by one... */
-  do {
-    size += sizeof (struct ifreq);
-    /* realloc buffer size until no overflow occurs  */
-    if (NULL == (ifc.ifc_req = realloc (ifc.ifc_req, size))) {
-      nice_debug ("Error : Out of memory while allocation interface"
-          "configuration structure");
-      close (sockfd);
-      return 0;
-    }
-    ifc.ifc_len = size;
-
-    if (ioctl (sockfd, SIOCGIFCONF, &ifc)) {
-      perror ("ioctl SIOCFIFCONF");
-      close (sockfd);
-      free (ifc.ifc_req);
-      return 0;
-    }
-  } while (size <= ifc.ifc_len);
-
-
-  /* Loop throught the interface list and get the IP address of each IF */
-  for (ifr = ifc.ifc_req;
-       (gchar *) ifr < (gchar *) ifc.ifc_req + ifc.ifc_len;
-       ++ifr) {
-    NiceAddress *myaddr = (NiceAddress *) &ifr->ifr_addr;
-
-    if (!nice_address_equal_no_port (myaddr, addr))
-      continue;
-    if (ifr->ifr_ifindex == 0)
-      continue;
-
-    if_index = ifr->ifr_ifindex;
-    break;
-  }
-
-  free (ifc.ifc_req);
-  close (sockfd);
-
-  return if_index;
+#endif
 }
 
 #ifdef HAVE_GETIFADDRS
