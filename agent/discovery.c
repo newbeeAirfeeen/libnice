@@ -59,7 +59,7 @@
 #include "discovery.h"
 #include "stun/usages/bind.h"
 #include "stun/usages/turn.h"
-#include "socket.h"
+#include "socket/socket.h"
 
 /*
  * Frees the CandidateDiscovery structure pointed to

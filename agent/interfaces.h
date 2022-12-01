@@ -37,7 +37,7 @@
  */
 
 #include <glib.h>
-#include <address.h>
+#include <agent/address.h>
 
 G_BEGIN_DECLS
 

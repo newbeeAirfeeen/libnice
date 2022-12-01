@@ -45,7 +45,7 @@
 typedef struct _NiceStream NiceStream;
 
 #include "component.h"
-#include "random.h"
+#include "random/random.h"
 
 G_BEGIN_DECLS
 

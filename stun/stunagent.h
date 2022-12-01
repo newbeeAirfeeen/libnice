@@ -69,8 +69,8 @@
  */
 typedef struct stun_agent_t StunAgent;
 
-#include "stunmessage.h"
 #include "debug.h"
+#include "stunmessage.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -97,12 +97,12 @@ extern "C" {
  * the same compatibility as @STUN_COMPATIBILITY_MSICE2.</warning>
  */
 typedef enum {
-  STUN_COMPATIBILITY_RFC3489,
-  STUN_COMPATIBILITY_RFC5389,
-  STUN_COMPATIBILITY_MSICE2,
-  STUN_COMPATIBILITY_OC2007,
-  STUN_COMPATIBILITY_WLM2009 = STUN_COMPATIBILITY_MSICE2,
-  STUN_COMPATIBILITY_LAST = STUN_COMPATIBILITY_OC2007
+    STUN_COMPATIBILITY_RFC3489,
+    STUN_COMPATIBILITY_RFC5389,
+    STUN_COMPATIBILITY_MSICE2,
+    STUN_COMPATIBILITY_OC2007,
+    STUN_COMPATIBILITY_WLM2009 = STUN_COMPATIBILITY_MSICE2,
+    STUN_COMPATIBILITY_LAST = STUN_COMPATIBILITY_OC2007
 } StunCompatibility;
 
 
@@ -135,16 +135,16 @@ typedef enum {
  * the status result of the validation of a STUN message.
  */
 typedef enum {
-  STUN_VALIDATION_SUCCESS,
-  STUN_VALIDATION_NOT_STUN,
-  STUN_VALIDATION_INCOMPLETE_STUN,
-  STUN_VALIDATION_BAD_REQUEST,
-  STUN_VALIDATION_UNAUTHORIZED_BAD_REQUEST,
-  STUN_VALIDATION_UNAUTHORIZED,
-  STUN_VALIDATION_UNMATCHED_RESPONSE,
-  STUN_VALIDATION_UNKNOWN_REQUEST_ATTRIBUTE,
-  STUN_VALIDATION_UNKNOWN_ATTRIBUTE,
-  STUN_VALIDATION_FORBIDDEN,
+    STUN_VALIDATION_SUCCESS,
+    STUN_VALIDATION_NOT_STUN,
+    STUN_VALIDATION_INCOMPLETE_STUN,
+    STUN_VALIDATION_BAD_REQUEST,
+    STUN_VALIDATION_UNAUTHORIZED_BAD_REQUEST,
+    STUN_VALIDATION_UNAUTHORIZED,
+    STUN_VALIDATION_UNMATCHED_RESPONSE,
+    STUN_VALIDATION_UNKNOWN_REQUEST_ATTRIBUTE,
+    STUN_VALIDATION_UNKNOWN_ATTRIBUTE,
+    STUN_VALIDATION_FORBIDDEN,
 } StunValidationStatus;
 
 /**
@@ -186,35 +186,35 @@ typedef enum {
  * <para> See also: stun_agent_validate() </para>
  */
 typedef enum {
-  STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS    = (1 << 0),
-  STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS     = (1 << 1),
-  STUN_AGENT_USAGE_USE_FINGERPRINT           = (1 << 2),
-  STUN_AGENT_USAGE_ADD_SOFTWARE              = (1 << 3),
-  STUN_AGENT_USAGE_IGNORE_CREDENTIALS        = (1 << 4),
-  STUN_AGENT_USAGE_NO_INDICATION_AUTH        = (1 << 5),
-  STUN_AGENT_USAGE_FORCE_VALIDATER           = (1 << 6),
-  STUN_AGENT_USAGE_NO_ALIGNED_ATTRIBUTES     = (1 << 7),
-  STUN_AGENT_USAGE_CONSENT_FRESHNESS         = (1 << 8),
+    STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS = (1 << 0),
+    STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS = (1 << 1),
+    STUN_AGENT_USAGE_USE_FINGERPRINT = (1 << 2),
+    STUN_AGENT_USAGE_ADD_SOFTWARE = (1 << 3),
+    STUN_AGENT_USAGE_IGNORE_CREDENTIALS = (1 << 4),
+    STUN_AGENT_USAGE_NO_INDICATION_AUTH = (1 << 5),
+    STUN_AGENT_USAGE_FORCE_VALIDATER = (1 << 6),
+    STUN_AGENT_USAGE_NO_ALIGNED_ATTRIBUTES = (1 << 7),
+    STUN_AGENT_USAGE_CONSENT_FRESHNESS = (1 << 8),
 } StunAgentUsageFlags;
 
 
 typedef struct {
-  StunTransactionId id;
-  StunMethod method;
-  uint8_t *key;
-  size_t key_len;
-  uint8_t long_term_key[16];
-  bool long_term_valid;
-  bool valid;
+    StunTransactionId id;
+    StunMethod method;
+    uint8_t *key;
+    size_t key_len;
+    uint8_t long_term_key[16];
+    bool long_term_valid;
+    bool valid;
 } StunAgentSavedIds;
 
 struct stun_agent_t {
-  StunCompatibility compatibility;
-  StunAgentSavedIds sent_ids[STUN_AGENT_MAX_SAVED_IDS];
-  uint16_t *known_attributes;
-  StunAgentUsageFlags usage_flags;
-  const char *software_attribute;
-  bool ms_ice2_send_legacy_connchecks;
+    StunCompatibility compatibility;
+    StunAgentSavedIds sent_ids[STUN_AGENT_MAX_SAVED_IDS];
+    uint16_t *known_attributes;
+    StunAgentUsageFlags usage_flags;
+    const char *software_attribute;
+    bool ms_ice2_send_legacy_connchecks;
 };
 
 /**
@@ -230,10 +230,10 @@ struct stun_agent_t {
  * <para> See also: stun_agent_default_validater() </para>
  */
 typedef struct {
-  uint8_t *username;
-  size_t username_len;
-  uint8_t *password;
-  size_t password_len;
+    uint8_t *username;
+    size_t username_len;
+    uint8_t *password;
+    size_t password_len;
 } StunDefaultValidaterData;
 
 
@@ -255,9 +255,9 @@ typedef struct {
  * Returns: %TRUE if the authentication was successful,
  * %FALSE if the authentication failed
  */
-typedef bool (*StunMessageIntegrityValidate) (StunAgent *agent,
-    StunMessage *message, uint8_t *username, uint16_t username_len,
-    uint8_t **password, size_t *password_len, void *user_data);
+typedef bool (*StunMessageIntegrityValidate)(StunAgent *agent,
+                                             StunMessage *message, uint8_t *username, uint16_t username_len,
+                                             uint8_t **password, size_t *password_len, void *user_data);
 
 /**
  * stun_agent_default_validater:
@@ -282,9 +282,9 @@ typedef bool (*StunMessageIntegrityValidate) (StunAgent *agent,
  * Returns: %TRUE if the authentication was successful,
  * %FALSE if the authentication failed
  */
-bool stun_agent_default_validater (StunAgent *agent,
-    StunMessage *message, uint8_t *username, uint16_t username_len,
-    uint8_t **password, size_t *password_len, void *user_data);
+bool stun_agent_default_validater(StunAgent *agent,
+                                  StunMessage *message, uint8_t *username, uint16_t username_len,
+                                  uint8_t **password, size_t *password_len, void *user_data);
 
 /**
  * stun_agent_init:
@@ -317,8 +317,8 @@ bool stun_agent_default_validater (StunAgent *agent,
     </para>
  </note>
  */
-void stun_agent_init (StunAgent *agent, const uint16_t *known_attributes,
-    StunCompatibility compatibility, StunAgentUsageFlags usage_flags);
+void stun_agent_init(StunAgent *agent, const uint16_t *known_attributes,
+                     StunCompatibility compatibility, StunAgentUsageFlags usage_flags);
 
 /**
  * stun_agent_validate:
@@ -357,9 +357,9 @@ void stun_agent_init (StunAgent *agent, const uint16_t *known_attributes,
    </para>
  </note>
  */
-StunValidationStatus stun_agent_validate (StunAgent *agent, StunMessage *msg,
-    const uint8_t *buffer, size_t buffer_len,
-    StunMessageIntegrityValidate validater, void * validater_data);
+StunValidationStatus stun_agent_validate(StunAgent *agent, StunMessage *msg,
+                                         const uint8_t *buffer, size_t buffer_len,
+                                         StunMessageIntegrityValidate validater, void *validater_data);
 
 /**
  * stun_agent_init_request:
@@ -372,8 +372,8 @@ StunValidationStatus stun_agent_validate (StunAgent *agent, StunMessage *msg,
  * Creates a new STUN message of class #STUN_REQUEST and with the method @m
  * Returns: %TRUE if the message was initialized correctly, %FALSE otherwise
  */
-bool stun_agent_init_request (StunAgent *agent, StunMessage *msg,
-    uint8_t *buffer, size_t buffer_len, StunMethod m);
+bool stun_agent_init_request(StunAgent *agent, StunMessage *msg,
+                             uint8_t *buffer, size_t buffer_len, StunMethod m);
 
 /**
  * stun_agent_init_indication:
@@ -386,8 +386,8 @@ bool stun_agent_init_request (StunAgent *agent, StunMessage *msg,
  * Creates a new STUN message of class #STUN_INDICATION and with the method @m
  * Returns: %TRUE if the message was initialized correctly, %FALSE otherwise
  */
-bool stun_agent_init_indication (StunAgent *agent, StunMessage *msg,
-    uint8_t *buffer, size_t buffer_len, StunMethod m);
+bool stun_agent_init_indication(StunAgent *agent, StunMessage *msg,
+                                uint8_t *buffer, size_t buffer_len, StunMethod m);
 
 /**
  * stun_agent_init_response:
@@ -403,8 +403,8 @@ bool stun_agent_init_indication (StunAgent *agent, StunMessage *msg,
  * specify the key with stun_agent_finish_message()
  * Returns: %TRUE if the message was initialized correctly, %FALSE otherwise
  */
-bool stun_agent_init_response (StunAgent *agent, StunMessage *msg,
-    uint8_t *buffer, size_t buffer_len, const StunMessage *request);
+bool stun_agent_init_response(StunAgent *agent, StunMessage *msg,
+                              uint8_t *buffer, size_t buffer_len, const StunMessage *request);
 
 /**
  * stun_agent_init_error:
@@ -424,9 +424,9 @@ bool stun_agent_init_response (StunAgent *agent, StunMessage *msg,
  * string.
  * Returns: %TRUE if the message was initialized correctly, %FALSE otherwise
  */
-bool stun_agent_init_error (StunAgent *agent, StunMessage *msg,
-    uint8_t *buffer, size_t buffer_len, const StunMessage *request,
-    StunError err);
+bool stun_agent_init_error(StunAgent *agent, StunMessage *msg,
+                           uint8_t *buffer, size_t buffer_len, const StunMessage *request,
+                           StunError err);
 
 /**
  * stun_agent_build_unknown_attributes_error:
@@ -444,9 +444,9 @@ bool stun_agent_init_error (StunAgent *agent, StunMessage *msg,
  * by calling stun_agent_finish_message()
  * Returns: The size of the message built
  */
-size_t stun_agent_build_unknown_attributes_error (StunAgent *agent,
-    StunMessage *msg, uint8_t *buffer, size_t buffer_len,
-    const StunMessage *request);
+size_t stun_agent_build_unknown_attributes_error(StunAgent *agent,
+                                                 StunMessage *msg, uint8_t *buffer, size_t buffer_len,
+                                                 const StunMessage *request);
 
 
 /**
@@ -478,8 +478,8 @@ size_t stun_agent_build_unknown_attributes_error (StunAgent *agent,
      </para>
    </note>
  */
-size_t stun_agent_finish_message (StunAgent *agent, StunMessage *msg,
-   const uint8_t *key, size_t key_len);
+size_t stun_agent_finish_message(StunAgent *agent, StunMessage *msg,
+                                 const uint8_t *key, size_t key_len);
 
 /**
  * stun_agent_forget_transaction:
@@ -499,7 +499,7 @@ size_t stun_agent_finish_message (StunAgent *agent, StunMessage *msg,
  * Since: 0.0.6
  * Returns: %TRUE if the transaction was found, %FALSE otherwise
  */
-bool stun_agent_forget_transaction (StunAgent *agent, StunTransactionId id);
+bool stun_agent_forget_transaction(StunAgent *agent, StunTransactionId id);
 
 
 /**
@@ -528,7 +528,7 @@ bool stun_agent_forget_transaction (StunAgent *agent, StunTransactionId id);
  * Since: 0.0.10
  *
  */
-void stun_agent_set_software (StunAgent *agent, const char *software);
+void stun_agent_set_software(StunAgent *agent, const char *software);
 
 #ifdef __cplusplus
 }

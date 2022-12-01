@@ -47,7 +47,7 @@
 #include <sys/socket.h>
 #endif
 
-#include "stun/stunagent.h"
+#include "../stunagent.h"
 #include "turn.h"
 
 #include <string.h>

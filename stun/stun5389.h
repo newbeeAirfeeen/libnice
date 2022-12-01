@@ -43,10 +43,10 @@
 #ifdef _WIN32
 #include "win32_common.h"
 #else
-# include <stdint.h>
-# include <stdbool.h>
+#include <stdbool.h>
+#include <stdint.h>
 #endif
-# include <sys/types.h>
+#include <sys/types.h>
 
 #include "stunmessage.h"
 /*
@@ -57,12 +57,11 @@
  *
  * @return fingerprint value in <b>host</b> byte order.
  */
-uint32_t stun_fingerprint (const uint8_t *msg, size_t len,
-    bool wlm2009_stupid_crc32_typo);
+uint32_t stun_fingerprint(const uint8_t *msg, size_t len,
+                          bool wlm2009_stupid_crc32_typo);
 
-StunMessageReturn stun_message_append_software (StunMessage *msg,
-    const char *software);
+StunMessageReturn stun_message_append_software(StunMessage *msg,
+                                               const char *software);
 
 
 #endif /* _STUN_5389_H */
-

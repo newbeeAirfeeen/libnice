@@ -56,8 +56,8 @@
 #ifdef _WIN32
 #include "win32_common.h"
 #else
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 #endif
 
 #include <sys/types.h>
@@ -66,8 +66,8 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #else
-#include <sys/socket.h>
 #include <arpa/inet.h>
+#include <sys/socket.h>
 #endif
 
 #include "constants.h"
@@ -90,12 +90,11 @@ extern "C" {
  */
 
 /* Message classes */
-typedef enum
-{
-  STUN_REQUEST=0,
-  STUN_INDICATION=1,
-  STUN_RESPONSE=2,
-  STUN_ERROR=3
+typedef enum {
+    STUN_REQUEST = 0,
+    STUN_INDICATION = 1,
+    STUN_RESPONSE = 2,
+    STUN_ERROR = 3
 } StunClass;
 
 
@@ -125,21 +124,20 @@ typedef enum
  * a STUN message, as defined by various RFCs
  */
 /* Message methods */
-typedef enum
-{
-  STUN_BINDING=0x001,    /* RFC5389 */
-  STUN_SHARED_SECRET=0x002,  /* old RFC3489 */
-  STUN_ALLOCATE=0x003,    /* TURN-12 */
-  STUN_SET_ACTIVE_DST=0x004,  /* TURN-04 */
-  STUN_REFRESH=0x004,  /* TURN-12 */
-  STUN_SEND=0x004,  /* TURN-00 */
-  STUN_CONNECT=0x005,    /* TURN-04 */
-  STUN_OLD_SET_ACTIVE_DST=0x006,  /* TURN-00 */
-  STUN_IND_SEND=0x006,    /* TURN-12 */
-  STUN_IND_DATA=0x007,    /* TURN-12 */
-  STUN_IND_CONNECT_STATUS=0x008,  /* TURN-04 */
-  STUN_CREATEPERMISSION= 0x008, /* TURN-12 */
-  STUN_CHANNELBIND= 0x009 /* TURN-12 */
+typedef enum {
+    STUN_BINDING = 0x001,            /* RFC5389 */
+    STUN_SHARED_SECRET = 0x002,      /* old RFC3489 */
+    STUN_ALLOCATE = 0x003,           /* TURN-12 */
+    STUN_SET_ACTIVE_DST = 0x004,     /* TURN-04 */
+    STUN_REFRESH = 0x004,            /* TURN-12 */
+    STUN_SEND = 0x004,               /* TURN-00 */
+    STUN_CONNECT = 0x005,            /* TURN-04 */
+    STUN_OLD_SET_ACTIVE_DST = 0x006, /* TURN-00 */
+    STUN_IND_SEND = 0x006,           /* TURN-12 */
+    STUN_IND_DATA = 0x007,           /* TURN-12 */
+    STUN_IND_CONNECT_STATUS = 0x008, /* TURN-04 */
+    STUN_CREATEPERMISSION = 0x008,   /* TURN-12 */
+    STUN_CHANNELBIND = 0x009         /* TURN-12 */
 } StunMethod;
 
 /**
@@ -240,85 +238,84 @@ typedef enum
  * Known STUN attribute types as defined by various RFCs and drafts
  */
 /* Should be in sync with stun_is_unknown() */
-typedef enum
-{
-  /* Mandatory attributes */
-  /* 0x0000 */        /* reserved */
-  STUN_ATTRIBUTE_MAPPED_ADDRESS=0x0001,    /* RFC5389 */
-  STUN_ATTRIBUTE_RESPONSE_ADDRESS=0x0002,  /* old RFC3489 */
-  STUN_ATTRIBUTE_CHANGE_REQUEST=0x0003,    /* old RFC3489 */
-  STUN_ATTRIBUTE_SOURCE_ADDRESS=0x0004,    /* old RFC3489 */
-  STUN_ATTRIBUTE_CHANGED_ADDRESS=0x0005,  /* old RFC3489 */
-  STUN_ATTRIBUTE_USERNAME=0x0006,      /* RFC5389 */
-  STUN_ATTRIBUTE_PASSWORD=0x0007,    /* old RFC3489 */
-  STUN_ATTRIBUTE_MESSAGE_INTEGRITY=0x0008,    /* RFC5389 */
-  STUN_ATTRIBUTE_ERROR_CODE=0x0009,      /* RFC5389 */
-  STUN_ATTRIBUTE_UNKNOWN_ATTRIBUTES=0x000A,    /* RFC5389 */
-  STUN_ATTRIBUTE_REFLECTED_FROM=0x000B,    /* old RFC3489 */
-  STUN_ATTRIBUTE_CHANNEL_NUMBER=0x000C,        /* TURN-12 */
-  STUN_ATTRIBUTE_LIFETIME=0x000D,      /* TURN-12 */
-  /* MS_ALTERNATE_SERVER is only used by Microsoft's dialect, probably should
+typedef enum {
+    /* Mandatory attributes */
+    /* 0x0000 */                                /* reserved */
+    STUN_ATTRIBUTE_MAPPED_ADDRESS = 0x0001,     /* RFC5389 */
+    STUN_ATTRIBUTE_RESPONSE_ADDRESS = 0x0002,   /* old RFC3489 */
+    STUN_ATTRIBUTE_CHANGE_REQUEST = 0x0003,     /* old RFC3489 */
+    STUN_ATTRIBUTE_SOURCE_ADDRESS = 0x0004,     /* old RFC3489 */
+    STUN_ATTRIBUTE_CHANGED_ADDRESS = 0x0005,    /* old RFC3489 */
+    STUN_ATTRIBUTE_USERNAME = 0x0006,           /* RFC5389 */
+    STUN_ATTRIBUTE_PASSWORD = 0x0007,           /* old RFC3489 */
+    STUN_ATTRIBUTE_MESSAGE_INTEGRITY = 0x0008,  /* RFC5389 */
+    STUN_ATTRIBUTE_ERROR_CODE = 0x0009,         /* RFC5389 */
+    STUN_ATTRIBUTE_UNKNOWN_ATTRIBUTES = 0x000A, /* RFC5389 */
+    STUN_ATTRIBUTE_REFLECTED_FROM = 0x000B,     /* old RFC3489 */
+    STUN_ATTRIBUTE_CHANNEL_NUMBER = 0x000C,     /* TURN-12 */
+    STUN_ATTRIBUTE_LIFETIME = 0x000D,           /* TURN-12 */
+    /* MS_ALTERNATE_SERVER is only used by Microsoft's dialect, probably should
    * not to be placed in STUN_ALL_KNOWN_ATTRIBUTES */
-  STUN_ATTRIBUTE_MS_ALTERNATE_SERVER=0x000E, /* MS-TURN */
-  STUN_ATTRIBUTE_MAGIC_COOKIE=0x000F,        /* midcom-TURN 08 */
-  STUN_ATTRIBUTE_BANDWIDTH=0x0010,      /* TURN-04 */
-  STUN_ATTRIBUTE_DESTINATION_ADDRESS=0x0011,        /* midcom-TURN 08 */
-  STUN_ATTRIBUTE_REMOTE_ADDRESS=0x0012,    /* TURN-04 */
-  STUN_ATTRIBUTE_PEER_ADDRESS=0x0012,    /* TURN-09 */
-  STUN_ATTRIBUTE_XOR_PEER_ADDRESS=0x0012,    /* TURN-12 */
-  STUN_ATTRIBUTE_DATA=0x0013,      /* TURN-12 */
-  STUN_ATTRIBUTE_REALM=0x0014,      /* RFC5389 */
-  STUN_ATTRIBUTE_NONCE=0x0015,      /* RFC5389 */
-  STUN_ATTRIBUTE_RELAY_ADDRESS=0x0016,    /* TURN-04 */
-  STUN_ATTRIBUTE_RELAYED_ADDRESS=0x0016,    /* TURN-09 */
-  STUN_ATTRIBUTE_XOR_RELAYED_ADDRESS=0x0016,    /* TURN-12 */
-  STUN_ATTRIBUTE_REQUESTED_ADDRESS_TYPE=0x0017,  /* TURN-IPv6-05 */
-  STUN_ATTRIBUTE_REQUESTED_PORT_PROPS=0x0018,  /* TURN-04 */
-  STUN_ATTRIBUTE_REQUESTED_PROPS=0x0018,  /* TURN-09 */
-  STUN_ATTRIBUTE_EVEN_PORT=0x0018,  /* TURN-12 */
-  STUN_ATTRIBUTE_REQUESTED_TRANSPORT=0x0019,  /* TURN-12 */
-  STUN_ATTRIBUTE_DONT_FRAGMENT=0x001A,  /* TURN-12 */
-  /* 0x001B */        /* reserved */
-  /* 0x001C */        /* reserved */
-  /* 0x001D */        /* reserved */
-  /* 0x001E */        /* reserved */
-  /* 0x001F */        /* reserved */
-  STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS=0x0020,    /* RFC5389 */
-  STUN_ATTRIBUTE_TIMER_VAL=0x0021,      /* TURN-04 */
-  STUN_ATTRIBUTE_REQUESTED_IP=0x0022,    /* TURN-04 */
-  STUN_ATTRIBUTE_RESERVATION_TOKEN=0x0022,    /* TURN-09 */
-  STUN_ATTRIBUTE_CONNECT_STAT=0x0023,    /* TURN-04 */
-  STUN_ATTRIBUTE_PRIORITY=0x0024,      /* ICE-19 */
-  STUN_ATTRIBUTE_USE_CANDIDATE=0x0025,    /* ICE-19 */
-  /* 0x0026 */        /* reserved */
-  /* 0x0027 */        /* reserved */
-  /* 0x0028 */        /* reserved */
-  /* 0x0029 */        /* reserved */
-  /* 0x002A-0x7fff */      /* reserved */
+    STUN_ATTRIBUTE_MS_ALTERNATE_SERVER = 0x000E,    /* MS-TURN */
+    STUN_ATTRIBUTE_MAGIC_COOKIE = 0x000F,           /* midcom-TURN 08 */
+    STUN_ATTRIBUTE_BANDWIDTH = 0x0010,              /* TURN-04 */
+    STUN_ATTRIBUTE_DESTINATION_ADDRESS = 0x0011,    /* midcom-TURN 08 */
+    STUN_ATTRIBUTE_REMOTE_ADDRESS = 0x0012,         /* TURN-04 */
+    STUN_ATTRIBUTE_PEER_ADDRESS = 0x0012,           /* TURN-09 */
+    STUN_ATTRIBUTE_XOR_PEER_ADDRESS = 0x0012,       /* TURN-12 */
+    STUN_ATTRIBUTE_DATA = 0x0013,                   /* TURN-12 */
+    STUN_ATTRIBUTE_REALM = 0x0014,                  /* RFC5389 */
+    STUN_ATTRIBUTE_NONCE = 0x0015,                  /* RFC5389 */
+    STUN_ATTRIBUTE_RELAY_ADDRESS = 0x0016,          /* TURN-04 */
+    STUN_ATTRIBUTE_RELAYED_ADDRESS = 0x0016,        /* TURN-09 */
+    STUN_ATTRIBUTE_XOR_RELAYED_ADDRESS = 0x0016,    /* TURN-12 */
+    STUN_ATTRIBUTE_REQUESTED_ADDRESS_TYPE = 0x0017, /* TURN-IPv6-05 */
+    STUN_ATTRIBUTE_REQUESTED_PORT_PROPS = 0x0018,   /* TURN-04 */
+    STUN_ATTRIBUTE_REQUESTED_PROPS = 0x0018,        /* TURN-09 */
+    STUN_ATTRIBUTE_EVEN_PORT = 0x0018,              /* TURN-12 */
+    STUN_ATTRIBUTE_REQUESTED_TRANSPORT = 0x0019,    /* TURN-12 */
+    STUN_ATTRIBUTE_DONT_FRAGMENT = 0x001A,          /* TURN-12 */
+    /* 0x001B */                                    /* reserved */
+    /* 0x001C */                                    /* reserved */
+    /* 0x001D */                                    /* reserved */
+    /* 0x001E */                                    /* reserved */
+    /* 0x001F */                                    /* reserved */
+    STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS = 0x0020,     /* RFC5389 */
+    STUN_ATTRIBUTE_TIMER_VAL = 0x0021,              /* TURN-04 */
+    STUN_ATTRIBUTE_REQUESTED_IP = 0x0022,           /* TURN-04 */
+    STUN_ATTRIBUTE_RESERVATION_TOKEN = 0x0022,      /* TURN-09 */
+    STUN_ATTRIBUTE_CONNECT_STAT = 0x0023,           /* TURN-04 */
+    STUN_ATTRIBUTE_PRIORITY = 0x0024,               /* ICE-19 */
+    STUN_ATTRIBUTE_USE_CANDIDATE = 0x0025,          /* ICE-19 */
+    /* 0x0026 */                                    /* reserved */
+    /* 0x0027 */                                    /* reserved */
+    /* 0x0028 */                                    /* reserved */
+    /* 0x0029 */                                    /* reserved */
+    /* 0x002A-0x7fff */                             /* reserved */
 
-  /* Optional attributes */
-  /* 0x8000-0x8021 */      /* reserved */
-  STUN_ATTRIBUTE_OPTIONS=0x8001, /* libjingle */
-  STUN_ATTRIBUTE_MS_VERSION=0x8008,    /* MS-TURN */
-  STUN_ATTRIBUTE_MS_XOR_MAPPED_ADDRESS=0x8020,    /* MS-TURN */
-  STUN_ATTRIBUTE_SOFTWARE=0x8022,      /* RFC5389 */
-  STUN_ATTRIBUTE_ALTERNATE_SERVER=0x8023,    /* RFC5389 */
-  /* 0x8024 */        /* reserved */
-  /* 0x8025 */        /* reserved */
-  /* 0x8026 */        /* reserved */
-  /* 0x8027 */        /* reserved */
-  STUN_ATTRIBUTE_FINGERPRINT=0x8028,    /* RFC5389 */
-  STUN_ATTRIBUTE_ICE_CONTROLLED=0x8029,    /* ICE-19 */
-  STUN_ATTRIBUTE_ICE_CONTROLLING=0x802A,    /* ICE-19 */
-  /* 0x802B-0x804F */      /* reserved */
-  STUN_ATTRIBUTE_MS_SEQUENCE_NUMBER=0x8050,     /* MS-TURN */
-  /* 0x8051-0x8053 */      /* reserved */
-  STUN_ATTRIBUTE_CANDIDATE_IDENTIFIER=0x8054,     /* MS-ICE2 */
-  /* 0x8055-0x806F */      /* reserved */
-  STUN_ATTRIBUTE_MS_IMPLEMENTATION_VERSION=0x8070, /* MS-ICE2 */
-  /* 0x8071-0xC000 */      /* reserved */
-  STUN_ATTRIBUTE_NOMINATION=0xC001 /* https://tools.ietf.org/html/draft-thatcher-ice-renomination-00 */
-  /* 0xC002-0xFFFF */      /* reserved */
+    /* Optional attributes */
+    /* 0x8000-0x8021 */                                /* reserved */
+    STUN_ATTRIBUTE_OPTIONS = 0x8001,                   /* libjingle */
+    STUN_ATTRIBUTE_MS_VERSION = 0x8008,                /* MS-TURN */
+    STUN_ATTRIBUTE_MS_XOR_MAPPED_ADDRESS = 0x8020,     /* MS-TURN */
+    STUN_ATTRIBUTE_SOFTWARE = 0x8022,                  /* RFC5389 */
+    STUN_ATTRIBUTE_ALTERNATE_SERVER = 0x8023,          /* RFC5389 */
+    /* 0x8024 */                                       /* reserved */
+    /* 0x8025 */                                       /* reserved */
+    /* 0x8026 */                                       /* reserved */
+    /* 0x8027 */                                       /* reserved */
+    STUN_ATTRIBUTE_FINGERPRINT = 0x8028,               /* RFC5389 */
+    STUN_ATTRIBUTE_ICE_CONTROLLED = 0x8029,            /* ICE-19 */
+    STUN_ATTRIBUTE_ICE_CONTROLLING = 0x802A,           /* ICE-19 */
+    /* 0x802B-0x804F */                                /* reserved */
+    STUN_ATTRIBUTE_MS_SEQUENCE_NUMBER = 0x8050,        /* MS-TURN */
+    /* 0x8051-0x8053 */                                /* reserved */
+    STUN_ATTRIBUTE_CANDIDATE_IDENTIFIER = 0x8054,      /* MS-ICE2 */
+    /* 0x8055-0x806F */                                /* reserved */
+    STUN_ATTRIBUTE_MS_IMPLEMENTATION_VERSION = 0x8070, /* MS-ICE2 */
+    /* 0x8071-0xC000 */                                /* reserved */
+    STUN_ATTRIBUTE_NOMINATION = 0xC001                 /* https://tools.ietf.org/html/draft-thatcher-ice-renomination-00 */
+    /* 0xC002-0xFFFF */                                /* reserved */
 } StunAttribute;
 
 
@@ -330,47 +327,46 @@ typedef enum
  */
 /* Should be in sync with StunAttribute */
 static const uint16_t STUN_ALL_KNOWN_ATTRIBUTES[] =
-  {
-    STUN_ATTRIBUTE_MAPPED_ADDRESS,
-    STUN_ATTRIBUTE_RESPONSE_ADDRESS,
-    STUN_ATTRIBUTE_CHANGE_REQUEST,
-    STUN_ATTRIBUTE_SOURCE_ADDRESS,
-    STUN_ATTRIBUTE_CHANGED_ADDRESS,
-    STUN_ATTRIBUTE_USERNAME,
-    STUN_ATTRIBUTE_PASSWORD,
-    STUN_ATTRIBUTE_MESSAGE_INTEGRITY,
-    STUN_ATTRIBUTE_ERROR_CODE,
-    STUN_ATTRIBUTE_UNKNOWN_ATTRIBUTES,
-    STUN_ATTRIBUTE_REFLECTED_FROM,
-    STUN_ATTRIBUTE_CHANNEL_NUMBER,
-    STUN_ATTRIBUTE_LIFETIME,
-    STUN_ATTRIBUTE_MAGIC_COOKIE,
-    STUN_ATTRIBUTE_BANDWIDTH,
-    STUN_ATTRIBUTE_DESTINATION_ADDRESS,
-    STUN_ATTRIBUTE_REMOTE_ADDRESS,
-    STUN_ATTRIBUTE_PEER_ADDRESS,
-    STUN_ATTRIBUTE_XOR_PEER_ADDRESS,
-    STUN_ATTRIBUTE_DATA,
-    STUN_ATTRIBUTE_REALM,
-    STUN_ATTRIBUTE_NONCE,
-    STUN_ATTRIBUTE_RELAY_ADDRESS,
-    STUN_ATTRIBUTE_RELAYED_ADDRESS,
-    STUN_ATTRIBUTE_XOR_RELAYED_ADDRESS,
-    STUN_ATTRIBUTE_REQUESTED_ADDRESS_TYPE,
-    STUN_ATTRIBUTE_REQUESTED_PORT_PROPS,
-    STUN_ATTRIBUTE_REQUESTED_PROPS,
-    STUN_ATTRIBUTE_EVEN_PORT,
-    STUN_ATTRIBUTE_REQUESTED_TRANSPORT,
-    STUN_ATTRIBUTE_DONT_FRAGMENT,
-    STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS,
-    STUN_ATTRIBUTE_TIMER_VAL,
-    STUN_ATTRIBUTE_REQUESTED_IP,
-    STUN_ATTRIBUTE_RESERVATION_TOKEN,
-    STUN_ATTRIBUTE_CONNECT_STAT,
-    STUN_ATTRIBUTE_PRIORITY,
-    STUN_ATTRIBUTE_USE_CANDIDATE,
-    0
-  };
+        {
+                STUN_ATTRIBUTE_MAPPED_ADDRESS,
+                STUN_ATTRIBUTE_RESPONSE_ADDRESS,
+                STUN_ATTRIBUTE_CHANGE_REQUEST,
+                STUN_ATTRIBUTE_SOURCE_ADDRESS,
+                STUN_ATTRIBUTE_CHANGED_ADDRESS,
+                STUN_ATTRIBUTE_USERNAME,
+                STUN_ATTRIBUTE_PASSWORD,
+                STUN_ATTRIBUTE_MESSAGE_INTEGRITY,
+                STUN_ATTRIBUTE_ERROR_CODE,
+                STUN_ATTRIBUTE_UNKNOWN_ATTRIBUTES,
+                STUN_ATTRIBUTE_REFLECTED_FROM,
+                STUN_ATTRIBUTE_CHANNEL_NUMBER,
+                STUN_ATTRIBUTE_LIFETIME,
+                STUN_ATTRIBUTE_MAGIC_COOKIE,
+                STUN_ATTRIBUTE_BANDWIDTH,
+                STUN_ATTRIBUTE_DESTINATION_ADDRESS,
+                STUN_ATTRIBUTE_REMOTE_ADDRESS,
+                STUN_ATTRIBUTE_PEER_ADDRESS,
+                STUN_ATTRIBUTE_XOR_PEER_ADDRESS,
+                STUN_ATTRIBUTE_DATA,
+                STUN_ATTRIBUTE_REALM,
+                STUN_ATTRIBUTE_NONCE,
+                STUN_ATTRIBUTE_RELAY_ADDRESS,
+                STUN_ATTRIBUTE_RELAYED_ADDRESS,
+                STUN_ATTRIBUTE_XOR_RELAYED_ADDRESS,
+                STUN_ATTRIBUTE_REQUESTED_ADDRESS_TYPE,
+                STUN_ATTRIBUTE_REQUESTED_PORT_PROPS,
+                STUN_ATTRIBUTE_REQUESTED_PROPS,
+                STUN_ATTRIBUTE_EVEN_PORT,
+                STUN_ATTRIBUTE_REQUESTED_TRANSPORT,
+                STUN_ATTRIBUTE_DONT_FRAGMENT,
+                STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS,
+                STUN_ATTRIBUTE_TIMER_VAL,
+                STUN_ATTRIBUTE_REQUESTED_IP,
+                STUN_ATTRIBUTE_RESERVATION_TOKEN,
+                STUN_ATTRIBUTE_CONNECT_STAT,
+                STUN_ATTRIBUTE_PRIORITY,
+                STUN_ATTRIBUTE_USE_CANDIDATE,
+                0};
 
 /**
  * STUN_MSOC_KNOWN_ATTRIBUTES:
@@ -379,28 +375,27 @@ static const uint16_t STUN_ALL_KNOWN_ATTRIBUTES[] =
  * Microsoft Office Communicator as defined in [MS-TURN]
  */
 static const uint16_t STUN_MSOC_KNOWN_ATTRIBUTES[] =
-  {
-    STUN_ATTRIBUTE_MAPPED_ADDRESS,
-    STUN_ATTRIBUTE_USERNAME,
-    STUN_ATTRIBUTE_MESSAGE_INTEGRITY,
-    STUN_ATTRIBUTE_ERROR_CODE,
-    STUN_ATTRIBUTE_UNKNOWN_ATTRIBUTES,
-    STUN_ATTRIBUTE_LIFETIME,
-    STUN_ATTRIBUTE_MS_ALTERNATE_SERVER,
-    STUN_ATTRIBUTE_MAGIC_COOKIE,
-    STUN_ATTRIBUTE_BANDWIDTH,
-    STUN_ATTRIBUTE_DESTINATION_ADDRESS,
-    STUN_ATTRIBUTE_REMOTE_ADDRESS,
-    STUN_ATTRIBUTE_DATA,
-    /* REALM and NONCE have swapped hexadecimal IDs in [MS-TURN]. Libnice users
+        {
+                STUN_ATTRIBUTE_MAPPED_ADDRESS,
+                STUN_ATTRIBUTE_USERNAME,
+                STUN_ATTRIBUTE_MESSAGE_INTEGRITY,
+                STUN_ATTRIBUTE_ERROR_CODE,
+                STUN_ATTRIBUTE_UNKNOWN_ATTRIBUTES,
+                STUN_ATTRIBUTE_LIFETIME,
+                STUN_ATTRIBUTE_MS_ALTERNATE_SERVER,
+                STUN_ATTRIBUTE_MAGIC_COOKIE,
+                STUN_ATTRIBUTE_BANDWIDTH,
+                STUN_ATTRIBUTE_DESTINATION_ADDRESS,
+                STUN_ATTRIBUTE_REMOTE_ADDRESS,
+                STUN_ATTRIBUTE_DATA,
+                /* REALM and NONCE have swapped hexadecimal IDs in [MS-TURN]. Libnice users
      * or developers can still use these enumeration values in their original
      * meanings from StunAttribute anywhere in the code, as stun_message_find()
      * and stun_message_append() will choose correct ID in MSOC compatibility
      * modes. */
-    STUN_ATTRIBUTE_NONCE,
-    STUN_ATTRIBUTE_REALM,
-    0
-  };
+                STUN_ATTRIBUTE_NONCE,
+                STUN_ATTRIBUTE_REALM,
+                0};
 
 /**
  * StunTransactionId:
@@ -458,29 +453,28 @@ typedef uint8_t StunTransactionId[STUN_MESSAGE_TRANS_ID_LEN];
  * STUN error codes as defined by various RFCs and drafts
  */
 /* Should be in sync with stun_strerror() */
-typedef enum
-{
-  STUN_ERROR_TRY_ALTERNATE=300,      /* RFC5389 */
-  STUN_ERROR_BAD_REQUEST=400,      /* RFC5389 */
-  STUN_ERROR_UNAUTHORIZED=401,      /* RFC5389 */
-  STUN_ERROR_FORBIDDEN=403,      /* RFC7675 */
-  STUN_ERROR_UNKNOWN_ATTRIBUTE=420,    /* RFC5389 */
-  STUN_ERROR_ALLOCATION_MISMATCH=437,   /* TURN-12 */
-  STUN_ERROR_STALE_NONCE=438,      /* RFC5389 */
-  STUN_ERROR_ACT_DST_ALREADY=439,    /* TURN-04 */
-  STUN_ERROR_UNSUPPORTED_FAMILY=440,      /* TURN-IPv6-05 */
-  STUN_ERROR_WRONG_CREDENTIALS=441,    /* TURN-12 */
-  STUN_ERROR_UNSUPPORTED_TRANSPORT=442,    /* TURN-12 */
-  STUN_ERROR_INVALID_IP=443,      /* TURN-04 */
-  STUN_ERROR_INVALID_PORT=444,      /* TURN-04 */
-  STUN_ERROR_OP_TCP_ONLY=445,      /* TURN-04 */
-  STUN_ERROR_CONN_ALREADY=446,      /* TURN-04 */
-  STUN_ERROR_ALLOCATION_QUOTA_REACHED=486,    /* TURN-12 */
-  STUN_ERROR_ROLE_CONFLICT=487,      /* ICE-19 */
-  STUN_ERROR_SERVER_ERROR=500,      /* RFC5389 */
-  STUN_ERROR_SERVER_CAPACITY=507,    /* TURN-04 */
-  STUN_ERROR_INSUFFICIENT_CAPACITY=508,    /* TURN-12 */
-  STUN_ERROR_MAX=699
+typedef enum {
+    STUN_ERROR_TRY_ALTERNATE = 300,            /* RFC5389 */
+    STUN_ERROR_BAD_REQUEST = 400,              /* RFC5389 */
+    STUN_ERROR_UNAUTHORIZED = 401,             /* RFC5389 */
+    STUN_ERROR_FORBIDDEN = 403,                /* RFC7675 */
+    STUN_ERROR_UNKNOWN_ATTRIBUTE = 420,        /* RFC5389 */
+    STUN_ERROR_ALLOCATION_MISMATCH = 437,      /* TURN-12 */
+    STUN_ERROR_STALE_NONCE = 438,              /* RFC5389 */
+    STUN_ERROR_ACT_DST_ALREADY = 439,          /* TURN-04 */
+    STUN_ERROR_UNSUPPORTED_FAMILY = 440,       /* TURN-IPv6-05 */
+    STUN_ERROR_WRONG_CREDENTIALS = 441,        /* TURN-12 */
+    STUN_ERROR_UNSUPPORTED_TRANSPORT = 442,    /* TURN-12 */
+    STUN_ERROR_INVALID_IP = 443,               /* TURN-04 */
+    STUN_ERROR_INVALID_PORT = 444,             /* TURN-04 */
+    STUN_ERROR_OP_TCP_ONLY = 445,              /* TURN-04 */
+    STUN_ERROR_CONN_ALREADY = 446,             /* TURN-04 */
+    STUN_ERROR_ALLOCATION_QUOTA_REACHED = 486, /* TURN-12 */
+    STUN_ERROR_ROLE_CONFLICT = 487,            /* ICE-19 */
+    STUN_ERROR_SERVER_ERROR = 500,             /* RFC5389 */
+    STUN_ERROR_SERVER_CAPACITY = 507,          /* TURN-04 */
+    STUN_ERROR_INSUFFICIENT_CAPACITY = 508,    /* TURN-12 */
+    STUN_ERROR_MAX = 699
 } StunError;
 
 
@@ -499,13 +493,12 @@ typedef enum
  * This enum will report on whether an operation was successful or not
  * and what error occured if any.
  */
-typedef enum
-{
-  STUN_MESSAGE_RETURN_SUCCESS,
-  STUN_MESSAGE_RETURN_NOT_FOUND,
-  STUN_MESSAGE_RETURN_INVALID,
-  STUN_MESSAGE_RETURN_NOT_ENOUGH_SPACE,
-  STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS
+typedef enum {
+    STUN_MESSAGE_RETURN_SUCCESS,
+    STUN_MESSAGE_RETURN_NOT_FOUND,
+    STUN_MESSAGE_RETURN_INVALID,
+    STUN_MESSAGE_RETURN_NOT_ENOUGH_SPACE,
+    STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS
 } StunMessageReturn;
 
 #include "stunagent.h"
@@ -533,13 +526,13 @@ typedef enum
  * This structure represents a STUN message
  */
 struct _StunMessage {
-  StunAgent *agent;
-  uint8_t *buffer;
-  size_t buffer_len;
-  uint8_t *key;
-  size_t key_len;
-  uint8_t long_term_key[16];
-  bool long_term_valid;
+    StunAgent *agent;
+    uint8_t *buffer;
+    size_t buffer_len;
+    uint8_t *key;
+    size_t key_len;
+    uint8_t long_term_key[16];
+    bool long_term_valid;
 };
 
 /**
@@ -552,8 +545,8 @@ struct _StunMessage {
  * Initializes a STUN message buffer, with no attributes.
  * Returns: %TRUE if the initialization was successful
  */
-bool stun_message_init (StunMessage *msg, StunClass c, StunMethod m,
-    const StunTransactionId id);
+bool stun_message_init(StunMessage *msg, StunClass c, StunMethod m,
+                       const StunTransactionId id);
 
 /**
  * stun_message_length:
@@ -563,7 +556,7 @@ bool stun_message_init (StunMessage *msg, StunClass c, StunMethod m,
  *
  * Returns: The length of the message
  */
-uint16_t stun_message_length (const StunMessage *msg);
+uint16_t stun_message_length(const StunMessage *msg);
 
 /**
  * stun_message_find:
@@ -576,8 +569,8 @@ uint16_t stun_message_length (const StunMessage *msg);
  * Returns: A pointer to the start of the attribute payload if found,
  * otherwise NULL.
  */
-const void * stun_message_find (const StunMessage * msg, StunAttribute type,
-    uint16_t *palen);
+const void *stun_message_find(const StunMessage *msg, StunAttribute type,
+                              uint16_t *palen);
 
 
 /**
@@ -590,8 +583,8 @@ const void * stun_message_find (const StunMessage * msg, StunAttribute type,
  * Returns: A #StunMessageReturn value.
  * %STUN_MESSAGE_RETURN_INVALID is returned if the attribute's size is not zero.
  */
-StunMessageReturn stun_message_find_flag (const StunMessage *msg,
-    StunAttribute type);
+StunMessageReturn stun_message_find_flag(const StunMessage *msg,
+                                         StunAttribute type);
 
 /**
  * stun_message_find32:
@@ -605,8 +598,8 @@ StunMessageReturn stun_message_find_flag (const StunMessage *msg,
  * %STUN_MESSAGE_RETURN_INVALID is returned if the attribute's size is not
  * 4 bytes.
  */
-StunMessageReturn stun_message_find32 (const StunMessage *msg,
-    StunAttribute type, uint32_t *pval);
+StunMessageReturn stun_message_find32(const StunMessage *msg,
+                                      StunAttribute type, uint32_t *pval);
 
 /**
  * stun_message_find64:
@@ -620,8 +613,8 @@ StunMessageReturn stun_message_find32 (const StunMessage *msg,
  * %STUN_MESSAGE_RETURN_INVALID is returned if the attribute's size is not
  * 8 bytes.
  */
-StunMessageReturn stun_message_find64 (const StunMessage *msg,
-    StunAttribute type, uint64_t *pval);
+StunMessageReturn stun_message_find64(const StunMessage *msg,
+                                      StunAttribute type, uint64_t *pval);
 
 /**
  * stun_message_find_string:
@@ -645,8 +638,8 @@ StunMessageReturn stun_message_find64 (const StunMessage *msg,
  </note>
  *
  */
-StunMessageReturn stun_message_find_string (const StunMessage *msg,
-    StunAttribute type, char *buf, size_t buflen);
+StunMessageReturn stun_message_find_string(const StunMessage *msg,
+                                           StunAttribute type, char *buf, size_t buflen);
 
 /**
  * stun_message_find_addr:
@@ -664,8 +657,8 @@ StunMessageReturn stun_message_find_string (const StunMessage *msg,
  * wrong or if the @addrlen is too small
  * %STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS if the address family is unknown.
  */
-StunMessageReturn stun_message_find_addr (const StunMessage *msg,
-    StunAttribute type, struct sockaddr_storage *addr, socklen_t *addrlen);
+StunMessageReturn stun_message_find_addr(const StunMessage *msg,
+                                         StunAttribute type, struct sockaddr_storage *addr, socklen_t *addrlen);
 
 /**
  * stun_message_find_xor_addr:
@@ -683,8 +676,8 @@ StunMessageReturn stun_message_find_addr (const StunMessage *msg,
  * wrong or if the @addrlen is too small
  * %STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS if the address family is unknown.
  */
-StunMessageReturn stun_message_find_xor_addr (const StunMessage *msg,
-    StunAttribute type, struct sockaddr_storage *addr, socklen_t *addrlen);
+StunMessageReturn stun_message_find_xor_addr(const StunMessage *msg,
+                                             StunAttribute type, struct sockaddr_storage *addr, socklen_t *addrlen);
 
 /**
  * stun_message_find_xor_addr_full:
@@ -703,9 +696,9 @@ StunMessageReturn stun_message_find_xor_addr (const StunMessage *msg,
  * wrong or if the @addrlen is too small
  * %STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS if the address family is unknown.
  */
-StunMessageReturn stun_message_find_xor_addr_full (const StunMessage *msg,
-    StunAttribute type, struct sockaddr_storage *addr,
-    socklen_t *addrlen, uint32_t magic_cookie);
+StunMessageReturn stun_message_find_xor_addr_full(const StunMessage *msg,
+                                                  StunAttribute type, struct sockaddr_storage *addr,
+                                                  socklen_t *addrlen, uint32_t magic_cookie);
 
 
 /**
@@ -718,7 +711,7 @@ StunMessageReturn stun_message_find_xor_addr_full (const StunMessage *msg,
  * Returns: A #StunMessageReturn value.
  * %STUN_MESSAGE_RETURN_INVALID is returned if the value is invalid
  */
-StunMessageReturn stun_message_find_error (const StunMessage *msg, int *code);
+StunMessageReturn stun_message_find_error(const StunMessage *msg, int *code);
 
 
 /**
@@ -733,8 +726,8 @@ StunMessageReturn stun_message_find_error (const StunMessage *msg, int *code);
  * where the attribute payload must be written, or NULL if there is not
  * enough room in the STUN message buffer.
  */
-void *stun_message_append (StunMessage *msg, StunAttribute type,
-    size_t length);
+void *stun_message_append(StunMessage *msg, StunAttribute type,
+                          size_t length);
 
 /**
  * stun_message_append_bytes:
@@ -747,8 +740,8 @@ void *stun_message_append (StunMessage *msg, StunAttribute type,
  *
  * Returns: A #StunMessageReturn value.
  */
-StunMessageReturn stun_message_append_bytes (StunMessage *msg,
-    StunAttribute type, const void *data, size_t len);
+StunMessageReturn stun_message_append_bytes(StunMessage *msg,
+                                            StunAttribute type, const void *data, size_t len);
 
 /**
  * stun_message_append_flag:
@@ -759,8 +752,8 @@ StunMessageReturn stun_message_append_bytes (StunMessage *msg,
  *
  * Returns: A #StunMessageReturn value.
  */
-StunMessageReturn stun_message_append_flag (StunMessage *msg,
-    StunAttribute type);
+StunMessageReturn stun_message_append_flag(StunMessage *msg,
+                                           StunAttribute type);
 
 /**
  * stun_message_append32:
@@ -772,8 +765,8 @@ StunMessageReturn stun_message_append_flag (StunMessage *msg,
  *
  * Returns: A #StunMessageReturn value.
  */
-StunMessageReturn stun_message_append32 (StunMessage *msg,
-    StunAttribute type, uint32_t value);
+StunMessageReturn stun_message_append32(StunMessage *msg,
+                                        StunAttribute type, uint32_t value);
 
 /**
  * stun_message_append64:
@@ -785,8 +778,8 @@ StunMessageReturn stun_message_append32 (StunMessage *msg,
  *
  * Returns: A #StunMessageReturn value.
  */
-StunMessageReturn stun_message_append64 (StunMessage *msg,
-    StunAttribute type, uint64_t value);
+StunMessageReturn stun_message_append64(StunMessage *msg,
+                                        StunAttribute type, uint64_t value);
 
 /**
  * stun_message_append_string:
@@ -798,8 +791,8 @@ StunMessageReturn stun_message_append64 (StunMessage *msg,
  *
  * Returns: A #StunMessageReturn value.
  */
-StunMessageReturn stun_message_append_string (StunMessage *msg,
-    StunAttribute type, const char *str);
+StunMessageReturn stun_message_append_string(StunMessage *msg,
+                                             StunAttribute type, const char *str);
 
 /**
  * stun_message_append_addr:
@@ -814,8 +807,8 @@ StunMessageReturn stun_message_append_string (StunMessage *msg,
  * %STUN_MESSAGE_RETURN_INVALID is returned if the @addrlen is too small
  * %STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS if the address family is unknown.
  */
-StunMessageReturn stun_message_append_addr (StunMessage * msg,
-    StunAttribute type, const struct sockaddr *addr, socklen_t addrlen);
+StunMessageReturn stun_message_append_addr(StunMessage *msg,
+                                           StunAttribute type, const struct sockaddr *addr, socklen_t addrlen);
 
 /**
  * stun_message_append_xor_addr:
@@ -830,8 +823,8 @@ StunMessageReturn stun_message_append_addr (StunMessage * msg,
  * %STUN_MESSAGE_RETURN_INVALID is returned if the @addrlen is too small
  * %STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS if the address family is unknown.
  */
-StunMessageReturn stun_message_append_xor_addr (StunMessage * msg,
-    StunAttribute type, const struct sockaddr_storage *addr, socklen_t addrlen);
+StunMessageReturn stun_message_append_xor_addr(StunMessage *msg,
+                                               StunAttribute type, const struct sockaddr_storage *addr, socklen_t addrlen);
 
 /**
  * stun_message_append_xor_addr_full:
@@ -847,9 +840,9 @@ StunMessageReturn stun_message_append_xor_addr (StunMessage * msg,
  * %STUN_MESSAGE_RETURN_INVALID is returned if the @addrlen is too small
  * %STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS if the address family is unknown.
  */
-StunMessageReturn stun_message_append_xor_addr_full (StunMessage * msg,
-    StunAttribute type, const struct sockaddr_storage *addr, socklen_t addrlen,
-    uint32_t magic_cookie);
+StunMessageReturn stun_message_append_xor_addr_full(StunMessage *msg,
+                                                    StunAttribute type, const struct sockaddr_storage *addr, socklen_t addrlen,
+                                                    uint32_t magic_cookie);
 
 /**
  * stun_message_append_error:
@@ -861,8 +854,8 @@ StunMessageReturn stun_message_append_xor_addr_full (StunMessage * msg,
  *
  * Returns: A #StunMessageReturn value.
  */
-StunMessageReturn stun_message_append_error (StunMessage * msg,
-    StunError code);
+StunMessageReturn stun_message_append_error(StunMessage *msg,
+                                            StunError code);
 
 /**
  * STUN_MESSAGE_BUFFER_INCOMPLETE:
@@ -895,8 +888,8 @@ StunMessageReturn stun_message_append_error (StunMessage * msg,
  * <para> See also: #STUN_MESSAGE_BUFFER_INCOMPLETE </para>
  * <para> See also: #STUN_MESSAGE_BUFFER_INVALID </para>
  */
-int stun_message_validate_buffer_length (const uint8_t *msg, size_t length,
-    bool has_padding);
+int stun_message_validate_buffer_length(const uint8_t *msg, size_t length,
+                                        bool has_padding);
 
 /**
  * StunInputVector:
@@ -913,8 +906,8 @@ int stun_message_validate_buffer_length (const uint8_t *msg, size_t length,
  * Since: 0.1.5
  */
 typedef struct {
-  const uint8_t *buffer;
-  size_t size;
+    const uint8_t *buffer;
+    size_t size;
 } StunInputVector;
 
 /**
@@ -943,8 +936,8 @@ typedef struct {
  *
  * Since: 0.1.5
  */
-ssize_t stun_message_validate_buffer_length_fast (StunInputVector *buffers,
-    int n_buffers, size_t total_length, bool has_padding);
+ssize_t stun_message_validate_buffer_length_fast(StunInputVector *buffers,
+                                                 int n_buffers, size_t total_length, bool has_padding);
 
 /**
  * stun_message_id:
@@ -953,7 +946,7 @@ ssize_t stun_message_validate_buffer_length_fast (StunInputVector *buffers,
  *
  * Retreive the STUN transaction id from a STUN message
  */
-void stun_message_id (const StunMessage *msg, StunTransactionId id);
+void stun_message_id(const StunMessage *msg, StunTransactionId id);
 
 /**
  * stun_message_get_class:
@@ -963,7 +956,7 @@ void stun_message_id (const StunMessage *msg, StunTransactionId id);
  *
  * Returns: The #StunClass
  */
-StunClass stun_message_get_class (const StunMessage *msg);
+StunClass stun_message_get_class(const StunMessage *msg);
 
 /**
  * stun_message_get_method:
@@ -973,7 +966,7 @@ StunClass stun_message_get_class (const StunMessage *msg);
  *
  * Returns: The #StunMethod
  */
-StunMethod stun_message_get_method (const StunMessage *msg);
+StunMethod stun_message_get_method(const StunMessage *msg);
 
 /**
  * stun_message_has_attribute:
@@ -984,7 +977,7 @@ StunMethod stun_message_get_method (const StunMessage *msg);
  *
  * Returns: %TRUE if the attribute is found, %FALSE otherwise
  */
-bool stun_message_has_attribute (const StunMessage *msg, StunAttribute type);
+bool stun_message_has_attribute(const StunMessage *msg, StunAttribute type);
 
 
 /* Defined in stun5389.c */
@@ -996,7 +989,7 @@ bool stun_message_has_attribute (const StunMessage *msg, StunAttribute type);
  *
  * Returns: %TRUE if the cookie is present, %FALSE otherwise
  */
-bool stun_message_has_cookie (const StunMessage *msg);
+bool stun_message_has_cookie(const StunMessage *msg);
 
 
 /**
@@ -1008,7 +1001,7 @@ bool stun_message_has_cookie (const StunMessage *msg);
  *
  * Returns: %TRUE if the attribute is an optional one
  */
-bool stun_optional (uint16_t t);
+bool stun_optional(uint16_t t);
 
 /**
  * stun_strerror:
@@ -1018,7 +1011,7 @@ bool stun_optional (uint16_t t);
  *
  * Returns: A static pointer to a nul-terminated error message string.
  */
-const char *stun_strerror (StunError code);
+const char *stun_strerror(StunError code);
 
 #ifdef __cplusplus
 }

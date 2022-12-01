@@ -50,38 +50,36 @@
  */
 
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 
 #ifdef G_OS_WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #else
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <sys/types.h>
 #endif
 
 G_BEGIN_DECLS
 
 #define NICE_TYPE_ADDRESS (nice_address_get_type())
 
-GType nice_address_get_type (void);
+GType nice_address_get_type(void);
 
 /**
  * NiceAddress:
  *
  * The #NiceAddress structure that represents an IPv4 or IPv6 address.
  */
-struct _NiceAddress
-{
-  union
-  {
-    struct sockaddr     addr;
-    struct sockaddr_in  ip4;
-    struct sockaddr_in6 ip6;
-  } s;
+struct _NiceAddress {
+    union {
+        struct sockaddr addr;
+        struct sockaddr_in ip4;
+        struct sockaddr_in6 ip6;
+    } s;
 };
 
 
@@ -103,8 +101,7 @@ typedef struct _NiceAddress NiceAddress;
  *
  * Initialize a #NiceAddress into an undefined address
  */
-void
-nice_address_init (NiceAddress *addr);
+void nice_address_init(NiceAddress *addr);
 
 /**
  * nice_address_new:
@@ -115,7 +112,7 @@ nice_address_init (NiceAddress *addr);
  * Returns: The new #NiceAddress
  */
 NiceAddress *
-nice_address_new (void);
+nice_address_new(void);
 
 /**
  * nice_address_free:
@@ -123,8 +120,7 @@ nice_address_new (void);
  *
  * Frees a #NiceAddress created with nice_address_new() or nice_address_dup()
  */
-void
-nice_address_free (NiceAddress *addr);
+void nice_address_free(NiceAddress *addr);
 
 /**
  * nice_address_dup:
@@ -135,7 +131,7 @@ nice_address_free (NiceAddress *addr);
  * Returns: The new #NiceAddress
  */
 NiceAddress *
-nice_address_dup (const NiceAddress *addr);
+nice_address_dup(const NiceAddress *addr);
 
 
 /**
@@ -152,8 +148,7 @@ nice_address_dup (const NiceAddress *addr);
   </para>
  </note>
  */
-void
-nice_address_set_ipv4 (NiceAddress *addr, guint32 addr_ipv4);
+void nice_address_set_ipv4(NiceAddress *addr, guint32 addr_ipv4);
 
 
 /**
@@ -170,8 +165,7 @@ nice_address_set_ipv4 (NiceAddress *addr, guint32 addr_ipv4);
   </para>
  </note>
  */
-void
-nice_address_set_ipv6 (NiceAddress *addr, const guchar *addr_ipv6);
+void nice_address_set_ipv6(NiceAddress *addr, const guchar *addr_ipv6);
 
 
 /**
@@ -181,8 +175,7 @@ nice_address_set_ipv6 (NiceAddress *addr, const guchar *addr_ipv6);
  *
  * Set the port of @addr to @port
  */
-void
-nice_address_set_port (NiceAddress *addr, guint port);
+void nice_address_set_port(NiceAddress *addr, guint port);
 
 /**
  * nice_address_get_port:
@@ -192,8 +185,7 @@ nice_address_set_port (NiceAddress *addr, guint port);
  *
  * Returns: The port of @addr
  */
-guint
-nice_address_get_port (const NiceAddress *addr);
+guint nice_address_get_port(const NiceAddress *addr);
 
 /**
  * nice_address_set_from_string:
@@ -205,7 +197,7 @@ nice_address_get_port (const NiceAddress *addr);
  * Returns: %TRUE if success, %FALSE on error
  */
 gboolean
-nice_address_set_from_string (NiceAddress *addr, const gchar *str);
+nice_address_set_from_string(NiceAddress *addr, const gchar *str);
 
 /**
  * nice_address_set_from_sockaddr:
@@ -215,8 +207,7 @@ nice_address_set_from_string (NiceAddress *addr, const gchar *str);
  * Sets an IPv4 or IPv6 address from the sockaddr structure @sin
  *
  */
-void
-nice_address_set_from_sockaddr (NiceAddress *addr, const struct sockaddr *sin);
+void nice_address_set_from_sockaddr(NiceAddress *addr, const struct sockaddr *sin);
 
 
 /**
@@ -227,8 +218,7 @@ nice_address_set_from_sockaddr (NiceAddress *addr, const struct sockaddr *sin);
  * Fills the sockaddr structure @sin with the address contained in @addr
  *
  */
-void
-nice_address_copy_to_sockaddr (const NiceAddress *addr, struct sockaddr *sin);
+void nice_address_copy_to_sockaddr(const NiceAddress *addr, struct sockaddr *sin);
 
 /**
  * nice_address_equal:
@@ -241,7 +231,7 @@ nice_address_copy_to_sockaddr (const NiceAddress *addr, struct sockaddr *sin);
  * Returns: %TRUE if @a and @b are the same address, %FALSE if they are different
  */
 gboolean
-nice_address_equal (const NiceAddress *a, const NiceAddress *b);
+nice_address_equal(const NiceAddress *a, const NiceAddress *b);
 
 /**
  * nice_address_equal_no_port:
@@ -257,7 +247,7 @@ nice_address_equal (const NiceAddress *a, const NiceAddress *b);
  * Since: 0.1.8
  */
 gboolean
-nice_address_equal_no_port (const NiceAddress *a, const NiceAddress *b);
+nice_address_equal_no_port(const NiceAddress *a, const NiceAddress *b);
 
 /**
  * nice_address_to_string:
@@ -267,8 +257,7 @@ nice_address_equal_no_port (const NiceAddress *a, const NiceAddress *b);
  * Transforms the address @addr into a human readable string
  *
  */
-void
-nice_address_to_string (const NiceAddress *addr, gchar *dst);
+void nice_address_to_string(const NiceAddress *addr, gchar *dst);
 
 /**
  * nice_address_is_private:
@@ -279,7 +268,7 @@ nice_address_to_string (const NiceAddress *addr, gchar *dst);
  * Returns: %TRUE if @addr is a private address, %FALSE otherwise
  */
 gboolean
-nice_address_is_private (const NiceAddress *addr);
+nice_address_is_private(const NiceAddress *addr);
 
 /**
  * nice_address_is_linklocal:
@@ -292,7 +281,7 @@ nice_address_is_private (const NiceAddress *addr);
  * Since: 0.1.19
  */
 gboolean
-nice_address_is_linklocal (const NiceAddress *addr);
+nice_address_is_linklocal(const NiceAddress *addr);
 
 /**
  * nice_address_is_valid:
@@ -304,7 +293,7 @@ nice_address_is_linklocal (const NiceAddress *addr);
  */
 G_GNUC_WARN_UNUSED_RESULT
 gboolean
-nice_address_is_valid (const NiceAddress *addr);
+nice_address_is_valid(const NiceAddress *addr);
 
 /**
  * nice_address_ip_version:
@@ -315,10 +304,8 @@ nice_address_is_valid (const NiceAddress *addr);
  * Returns: 4 for IPv4, 6 for IPv6 and 0 for undefined address
  */
 G_GNUC_WARN_UNUSED_RESULT
-int
-nice_address_ip_version (const NiceAddress *addr);
+int nice_address_ip_version(const NiceAddress *addr);
 
 G_END_DECLS
 
 #endif /* __LIBNICE_ADDRESS_H__ */
-

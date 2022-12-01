@@ -56,35 +56,34 @@
  */
 
 
-
 #include <glib-object.h>
 
 #ifndef __GTK_DOC_IGNORE__
 #ifdef G_OS_WIN32
-#  include <winsock2.h>
+#include <winsock2.h>
 
 #ifndef ECONNABORTED
-#  define ECONNABORTED WSAECONNABORTED
+#define ECONNABORTED WSAECONNABORTED
 #endif
 
 #ifndef ENOTCONN
-#  define ENOTCONN WSAENOTCONN
+#define ENOTCONN WSAENOTCONN
 #endif
 
 #ifndef EWOULDBLOCK
-#  define EWOULDBLOCK WSAEWOULDBLOCK
+#define EWOULDBLOCK WSAEWOULDBLOCK
 #endif
 
 #ifndef ECONNRESET
-#  define ECONNRESET WSAECONNRESET
+#define ECONNRESET WSAECONNRESET
 #endif
 
 #ifndef EMSGSIZE
-#  define EMSGSIZE WSAEMSGSIZE
+#define EMSGSIZE WSAEMSGSIZE
 #endif
 
 #ifndef ETIMEDOUT
-#  define ETIMEDOUT WSAETIMEDOUT
+#define ETIMEDOUT WSAETIMEDOUT
 #endif
 #endif
 #endif
@@ -104,24 +103,24 @@ typedef struct _PseudoTcpSocket PseudoTcpSocket;
 
 typedef struct _PseudoTcpSocketClass PseudoTcpSocketClass;
 
-GType pseudo_tcp_socket_get_type (void);
+GType pseudo_tcp_socket_get_type(void);
 
 /* TYPE MACROS */
 #define PSEUDO_TCP_SOCKET_TYPE \
-  (pseudo_tcp_socket_get_type ())
-#define PSEUDO_TCP_SOCKET(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST((obj), PSEUDO_TCP_SOCKET_TYPE, \
-                              PseudoTcpSocket))
-#define PSEUDO_TCP_SOCKET_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_CAST((klass), PSEUDO_TCP_SOCKET_TYPE, \
-                           PseudoTcpSocketClass))
+    (pseudo_tcp_socket_get_type())
+#define PSEUDO_TCP_SOCKET(obj)                                 \
+    (G_TYPE_CHECK_INSTANCE_CAST((obj), PSEUDO_TCP_SOCKET_TYPE, \
+                                PseudoTcpSocket))
+#define PSEUDO_TCP_SOCKET_CLASS(klass)                        \
+    (G_TYPE_CHECK_CLASS_CAST((klass), PSEUDO_TCP_SOCKET_TYPE, \
+                             PseudoTcpSocketClass))
 #define IS_PSEUDO_TCP_SOCKET(obj) \
-  (G_TYPE_CHECK_INSTANCE_TYPE((obj), PSEUDO_TCP_SOCKET_TYPE))
+    (G_TYPE_CHECK_INSTANCE_TYPE((obj), PSEUDO_TCP_SOCKET_TYPE))
 #define IS_PSEUDO_TCP_SOCKET_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_TYPE((klass), PSEUDO_TCP_SOCKET_TYPE))
-#define PSEUDOTCP_SOCKET_GET_CLASS(obj) \
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), PSEUDO_TCP_SOCKET_TYPE, \
-                              PseudoTcpSocketClass))
+    (G_TYPE_CHECK_CLASS_TYPE((klass), PSEUDO_TCP_SOCKET_TYPE))
+#define PSEUDOTCP_SOCKET_GET_CLASS(obj)                       \
+    (G_TYPE_INSTANCE_GET_CLASS((obj), PSEUDO_TCP_SOCKET_TYPE, \
+                               PseudoTcpSocketClass))
 
 /**
  * PseudoTcpDebugLevel:
@@ -134,9 +133,9 @@ GType pseudo_tcp_socket_get_type (void);
  * Since: 0.0.11
  */
 typedef enum {
-  PSEUDO_TCP_DEBUG_NONE = 0,
-  PSEUDO_TCP_DEBUG_NORMAL,
-  PSEUDO_TCP_DEBUG_VERBOSE,
+    PSEUDO_TCP_DEBUG_NONE = 0,
+    PSEUDO_TCP_DEBUG_NORMAL,
+    PSEUDO_TCP_DEBUG_VERBOSE,
 } PseudoTcpDebugLevel;
 
 /**
@@ -168,17 +167,17 @@ typedef enum {
  * Since: 0.0.11
  */
 typedef enum {
-  PSEUDO_TCP_LISTEN,
-  PSEUDO_TCP_SYN_SENT,
-  PSEUDO_TCP_SYN_RECEIVED,
-  PSEUDO_TCP_ESTABLISHED,
-  PSEUDO_TCP_CLOSED,
-  PSEUDO_TCP_FIN_WAIT_1,
-  PSEUDO_TCP_FIN_WAIT_2,
-  PSEUDO_TCP_CLOSING,
-  PSEUDO_TCP_TIME_WAIT,
-  PSEUDO_TCP_CLOSE_WAIT,
-  PSEUDO_TCP_LAST_ACK,
+    PSEUDO_TCP_LISTEN,
+    PSEUDO_TCP_SYN_SENT,
+    PSEUDO_TCP_SYN_RECEIVED,
+    PSEUDO_TCP_ESTABLISHED,
+    PSEUDO_TCP_CLOSED,
+    PSEUDO_TCP_FIN_WAIT_1,
+    PSEUDO_TCP_FIN_WAIT_2,
+    PSEUDO_TCP_CLOSING,
+    PSEUDO_TCP_TIME_WAIT,
+    PSEUDO_TCP_CLOSE_WAIT,
+    PSEUDO_TCP_LAST_ACK,
 } PseudoTcpState;
 
 /**
@@ -195,9 +194,9 @@ typedef enum {
  * Since: 0.0.11
  */
 typedef enum {
-  WR_SUCCESS,
-  WR_TOO_LARGE,
-  WR_FAIL
+    WR_SUCCESS,
+    WR_TOO_LARGE,
+    WR_FAIL
 } PseudoTcpWriteResult;
 
 /**
@@ -213,9 +212,9 @@ typedef enum {
  * Since: 0.1.8
  */
 typedef enum {
-  PSEUDO_TCP_SHUTDOWN_RD,
-  PSEUDO_TCP_SHUTDOWN_WR,
-  PSEUDO_TCP_SHUTDOWN_RDWR,
+    PSEUDO_TCP_SHUTDOWN_RD,
+    PSEUDO_TCP_SHUTDOWN_WR,
+    PSEUDO_TCP_SHUTDOWN_RDWR,
 } PseudoTcpShutdown;
 
 /**
@@ -234,13 +233,13 @@ typedef enum {
  * Since: 0.0.11
  */
 typedef struct {
-  gpointer user_data;
-  void  (*PseudoTcpOpened) (PseudoTcpSocket *tcp, gpointer data);
-  void  (*PseudoTcpReadable) (PseudoTcpSocket *tcp, gpointer data);
-  void  (*PseudoTcpWritable) (PseudoTcpSocket *tcp, gpointer data);
-  void  (*PseudoTcpClosed) (PseudoTcpSocket *tcp, guint32 error, gpointer data);
-  PseudoTcpWriteResult (*WritePacket) (PseudoTcpSocket *tcp,
-      const gchar * buffer, guint32 len, gpointer data);
+    gpointer user_data;
+    void (*PseudoTcpOpened)(PseudoTcpSocket *tcp, gpointer data);
+    void (*PseudoTcpReadable)(PseudoTcpSocket *tcp, gpointer data);
+    void (*PseudoTcpWritable)(PseudoTcpSocket *tcp, gpointer data);
+    void (*PseudoTcpClosed)(PseudoTcpSocket *tcp, guint32 error, gpointer data);
+    PseudoTcpWriteResult (*WritePacket)(PseudoTcpSocket *tcp,
+                                        const gchar *buffer, guint32 len, gpointer data);
 } PseudoTcpCallbacks;
 
 /**
@@ -266,8 +265,8 @@ typedef struct {
  *
  * Since: 0.0.11
  */
-PseudoTcpSocket *pseudo_tcp_socket_new (guint32 conversation,
-    PseudoTcpCallbacks *callbacks);
+PseudoTcpSocket *pseudo_tcp_socket_new(guint32 conversation,
+                                       PseudoTcpCallbacks *callbacks);
 
 
 /**
@@ -310,7 +309,7 @@ gboolean pseudo_tcp_socket_connect(PseudoTcpSocket *self);
  *
  * Since: 0.0.11
  */
-gint  pseudo_tcp_socket_recv(PseudoTcpSocket *self, char * buffer, size_t len);
+gint pseudo_tcp_socket_recv(PseudoTcpSocket *self, char *buffer, size_t len);
 
 
 /**
@@ -334,8 +333,8 @@ gint  pseudo_tcp_socket_recv(PseudoTcpSocket *self, char * buffer, size_t len);
  *
  * Since: 0.0.11
  */
-gint pseudo_tcp_socket_send(PseudoTcpSocket *self, const char * buffer,
-    guint32 len);
+gint pseudo_tcp_socket_send(PseudoTcpSocket *self, const char *buffer,
+                            guint32 len);
 
 
 /**
@@ -386,7 +385,7 @@ void pseudo_tcp_socket_close(PseudoTcpSocket *self, gboolean force);
  *
  * Since: 0.1.8
  */
-void pseudo_tcp_socket_shutdown (PseudoTcpSocket *self, PseudoTcpShutdown how);
+void pseudo_tcp_socket_shutdown(PseudoTcpSocket *self, PseudoTcpShutdown how);
 
 /**
  * pseudo_tcp_socket_get_error:
@@ -433,7 +432,7 @@ int pseudo_tcp_socket_get_error(PseudoTcpSocket *self);
  * Since: 0.0.11
  */
 gboolean pseudo_tcp_socket_get_next_clock(PseudoTcpSocket *self,
-    guint64 *timeout);
+                                          guint64 *timeout);
 
 
 /**
@@ -477,7 +476,7 @@ void pseudo_tcp_socket_notify_mtu(PseudoTcpSocket *self, guint16 mtu);
  * Since: 0.0.11
  */
 gboolean pseudo_tcp_socket_notify_packet(PseudoTcpSocket *self,
-    const gchar * buffer, guint32 len);
+                                         const gchar *buffer, guint32 len);
 
 
 /**
@@ -492,8 +491,8 @@ gboolean pseudo_tcp_socket_notify_packet(PseudoTcpSocket *self,
  *
  * Since: 0.1.5
  */
-gboolean pseudo_tcp_socket_notify_message (PseudoTcpSocket *self,
-    NiceInputMessage *message);
+gboolean pseudo_tcp_socket_notify_message(PseudoTcpSocket *self,
+                                          NiceInputMessage *message);
 
 
 /**
@@ -504,7 +503,7 @@ gboolean pseudo_tcp_socket_notify_message (PseudoTcpSocket *self,
  *
  * Since: 0.0.11
  */
-void pseudo_tcp_set_debug_level (PseudoTcpDebugLevel level);
+void pseudo_tcp_set_debug_level(PseudoTcpDebugLevel level);
 
 
 /**
@@ -519,7 +518,7 @@ void pseudo_tcp_set_debug_level (PseudoTcpDebugLevel level);
  * Since: 0.1.5
  */
 
-gint pseudo_tcp_socket_get_available_bytes (PseudoTcpSocket *self);
+gint pseudo_tcp_socket_get_available_bytes(PseudoTcpSocket *self);
 
 /**
  * pseudo_tcp_socket_can_send:
@@ -532,7 +531,7 @@ gint pseudo_tcp_socket_get_available_bytes (PseudoTcpSocket *self);
  * Since: 0.1.5
  */
 
-gboolean pseudo_tcp_socket_can_send (PseudoTcpSocket *self);
+gboolean pseudo_tcp_socket_can_send(PseudoTcpSocket *self);
 
 /**
  * pseudo_tcp_socket_get_available_send_space:
@@ -544,7 +543,7 @@ gboolean pseudo_tcp_socket_can_send (PseudoTcpSocket *self);
  *
  * Since: 0.1.5
  */
-gsize pseudo_tcp_socket_get_available_send_space (PseudoTcpSocket *self);
+gsize pseudo_tcp_socket_get_available_send_space(PseudoTcpSocket *self);
 
 /**
  * pseudo_tcp_socket_set_time:
@@ -563,7 +562,7 @@ gsize pseudo_tcp_socket_get_available_send_space (PseudoTcpSocket *self);
  *
  * Since: 0.1.8
  */
-void pseudo_tcp_socket_set_time (PseudoTcpSocket *self, guint32 current_time);
+void pseudo_tcp_socket_set_time(PseudoTcpSocket *self, guint32 current_time);
 
 /**
  * pseudo_tcp_socket_is_closed:
@@ -575,7 +574,7 @@ void pseudo_tcp_socket_set_time (PseudoTcpSocket *self, guint32 current_time);
  * Returns: %TRUE if the socket is closed in both directions, %FALSE otherwise
  * Since: 0.1.8
  */
-gboolean pseudo_tcp_socket_is_closed (PseudoTcpSocket *self);
+gboolean pseudo_tcp_socket_is_closed(PseudoTcpSocket *self);
 
 /**
  * pseudo_tcp_socket_is_closed_remotely:
@@ -591,9 +590,8 @@ gboolean pseudo_tcp_socket_is_closed (PseudoTcpSocket *self);
  * %FALSE otherwise
  * Since: 0.1.8
  */
-gboolean pseudo_tcp_socket_is_closed_remotely (PseudoTcpSocket *self);
+gboolean pseudo_tcp_socket_is_closed_remotely(PseudoTcpSocket *self);
 
 G_END_DECLS
 
 #endif /* __LIBNICE_PSEUDOTCP_H__ */
-

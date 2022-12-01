@@ -36,51 +36,49 @@
 #ifndef __NICE_OUTPUT_STREAM_H__
 #define __NICE_OUTPUT_STREAM_H__
 
-#include <glib-object.h>
-#include <gio/gio.h>
 #include "agent.h"
+#include <gio/gio.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
 /* TYPE MACROS */
 #define NICE_TYPE_OUTPUT_STREAM \
-  (nice_output_stream_get_type ())
-#define NICE_OUTPUT_STREAM(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST((obj), NICE_TYPE_OUTPUT_STREAM, \
-                              NiceOutputStream))
-#define NICE_OUTPUT_STREAM_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_CAST((klass), NICE_TYPE_OUTPUT_STREAM, \
-                           NiceOutputStreamClass))
+    (nice_output_stream_get_type())
+#define NICE_OUTPUT_STREAM(obj)                                 \
+    (G_TYPE_CHECK_INSTANCE_CAST((obj), NICE_TYPE_OUTPUT_STREAM, \
+                                NiceOutputStream))
+#define NICE_OUTPUT_STREAM_CLASS(klass)                        \
+    (G_TYPE_CHECK_CLASS_CAST((klass), NICE_TYPE_OUTPUT_STREAM, \
+                             NiceOutputStreamClass))
 #define NICE_IS_OUTPUT_STREAM(obj) \
-  (G_TYPE_CHECK_INSTANCE_TYPE((obj), NICE_TYPE_OUTPUT_STREAM))
+    (G_TYPE_CHECK_INSTANCE_TYPE((obj), NICE_TYPE_OUTPUT_STREAM))
 #define NICE_IS_OUTPUT_STREAM_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_TYPE((klass), NICE_TYPE_OUTPUT_STREAM))
-#define NICE_OUTPUT_STREAM_GET_CLASS(obj) \
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), NICE_TYPE_OUTPUT_STREAM, \
-                              NiceOutputStreamClass))
+    (G_TYPE_CHECK_CLASS_TYPE((klass), NICE_TYPE_OUTPUT_STREAM))
+#define NICE_OUTPUT_STREAM_GET_CLASS(obj)                      \
+    (G_TYPE_INSTANCE_GET_CLASS((obj), NICE_TYPE_OUTPUT_STREAM, \
+                               NiceOutputStreamClass))
 
 
-typedef struct _NiceOutputStreamPrivate    NiceOutputStreamPrivate;
-typedef struct _NiceOutputStreamClass  NiceOutputStreamClass;
+typedef struct _NiceOutputStreamPrivate NiceOutputStreamPrivate;
+typedef struct _NiceOutputStreamClass NiceOutputStreamClass;
 typedef struct _NiceOutputStream NiceOutputStream;
 
 
-GType nice_output_stream_get_type (void);
+GType nice_output_stream_get_type(void);
 
-struct _NiceOutputStreamClass
-{
-  GOutputStreamClass parent_class;
+struct _NiceOutputStreamClass {
+    GOutputStreamClass parent_class;
 };
 
-struct _NiceOutputStream
-{
-  GOutputStream parent_instance;
-  NiceOutputStreamPrivate *priv;
+struct _NiceOutputStream {
+    GOutputStream parent_instance;
+    NiceOutputStreamPrivate *priv;
 };
 
 
-NiceOutputStream *nice_output_stream_new (NiceAgent *agent,
-    guint stream_id, guint component_id);
+NiceOutputStream *nice_output_stream_new(NiceAgent *agent,
+                                         guint stream_id, guint component_id);
 
 G_END_DECLS
 

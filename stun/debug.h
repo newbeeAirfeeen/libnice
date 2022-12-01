@@ -37,8 +37,8 @@
 #ifndef STUN_DEBUG_H
 #define STUN_DEBUG_H
 
-#include <stddef.h>
 #include <stdarg.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,14 +50,14 @@ extern "C" {
  *
  * Enable debug messages to stderr
  */
-void stun_debug_enable (void);
+void stun_debug_enable(void);
 
 /**
  * stun_debug_disable:
  *
  * Disable debug messages to stderr
  */
-void stun_debug_disable (void);
+void stun_debug_disable(void);
 
 /**
  * StunDebugHandler:
@@ -67,10 +67,10 @@ void stun_debug_disable (void);
  * Callback for a debug message from the STUN code.
  */
 #if defined(__GNUC__) && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4))
-typedef void (*StunDebugHandler) (const char *format, va_list ap)
-  __attribute__((__format__ (__printf__, 1, 0)));
+typedef void (*StunDebugHandler)(const char *format, va_list ap)
+        __attribute__((__format__(__printf__, 1, 0)));
 #else
-typedef void (*StunDebugHandler) (const char *format, va_list ap);
+typedef void (*StunDebugHandler)(const char *format, va_list ap);
 #endif
 
 /**
@@ -84,19 +84,19 @@ typedef void (*StunDebugHandler) (const char *format, va_list ap);
  *
  * The default callback prints the formatted debug message to stderr.
  */
-void stun_set_debug_handler (StunDebugHandler handler);
+void stun_set_debug_handler(StunDebugHandler handler);
 
 #if defined(__GNUC__) && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4))
-void stun_debug (const char *fmt, ...)
-  __attribute__((__format__ (__printf__, 1, 2)));
+void stun_debug(const char *fmt, ...)
+        __attribute__((__format__(__printf__, 1, 2)));
 #else
-void stun_debug (const char *fmt, ...);
+void stun_debug(const char *fmt, ...);
 #endif
-void stun_debug_bytes (const char *prefix, const void *data, size_t len);
+void stun_debug_bytes(const char *prefix, const void *data, size_t len);
 
 
-# ifdef __cplusplus
+#ifdef __cplusplus
 }
-# endif
+#endif
 
 #endif /* STUN_DEBUG_H */

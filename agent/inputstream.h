@@ -36,50 +36,48 @@
 #ifndef __NICE_INPUT_STREAM_H__
 #define __NICE_INPUT_STREAM_H__
 
-#include <glib-object.h>
-#include <gio/gio.h>
 #include "agent.h"
+#include <gio/gio.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
 /* TYPE MACROS */
 #define NICE_TYPE_INPUT_STREAM \
-  (nice_input_stream_get_type ())
-#define NICE_INPUT_STREAM(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST((obj), NICE_TYPE_INPUT_STREAM, \
-                              NiceInputStream))
-#define NICE_INPUT_STREAM_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_CAST((klass), NICE_TYPE_INPUT_STREAM, \
-                           NiceInputStreamClass))
+    (nice_input_stream_get_type())
+#define NICE_INPUT_STREAM(obj)                                 \
+    (G_TYPE_CHECK_INSTANCE_CAST((obj), NICE_TYPE_INPUT_STREAM, \
+                                NiceInputStream))
+#define NICE_INPUT_STREAM_CLASS(klass)                        \
+    (G_TYPE_CHECK_CLASS_CAST((klass), NICE_TYPE_INPUT_STREAM, \
+                             NiceInputStreamClass))
 #define NICE_IS_INPUT_STREAM(obj) \
-  (G_TYPE_CHECK_INSTANCE_TYPE((obj), NICE_TYPE_INPUT_STREAM))
+    (G_TYPE_CHECK_INSTANCE_TYPE((obj), NICE_TYPE_INPUT_STREAM))
 #define NICE_IS_INPUT_STREAM_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_TYPE((klass), NICE_TYPE_INPUT_STREAM))
-#define NICE_INPUT_STREAM_GET_CLASS(obj) \
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), NICE_TYPE_INPUT_STREAM, \
-                              NiceInputStreamClass))
+    (G_TYPE_CHECK_CLASS_TYPE((klass), NICE_TYPE_INPUT_STREAM))
+#define NICE_INPUT_STREAM_GET_CLASS(obj)                      \
+    (G_TYPE_INSTANCE_GET_CLASS((obj), NICE_TYPE_INPUT_STREAM, \
+                               NiceInputStreamClass))
 
 
-typedef struct _NiceInputStreamPrivate    NiceInputStreamPrivate;
-typedef struct _NiceInputStreamClass  NiceInputStreamClass;
+typedef struct _NiceInputStreamPrivate NiceInputStreamPrivate;
+typedef struct _NiceInputStreamClass NiceInputStreamClass;
 typedef struct _NiceInputStream NiceInputStream;
 
-GType nice_input_stream_get_type (void);
+GType nice_input_stream_get_type(void);
 
-struct _NiceInputStreamClass
-{
-  GInputStreamClass parent_class;
+struct _NiceInputStreamClass {
+    GInputStreamClass parent_class;
 };
 
-struct _NiceInputStream
-{
-  GInputStream parent_instance;
-  NiceInputStreamPrivate *priv;
+struct _NiceInputStream {
+    GInputStream parent_instance;
+    NiceInputStreamPrivate *priv;
 };
 
 
-NiceInputStream *nice_input_stream_new (NiceAgent *agent,
-    guint stream_id, guint component_id);
+NiceInputStream *nice_input_stream_new(NiceAgent *agent,
+                                       guint stream_id, guint component_id);
 
 
 G_END_DECLS

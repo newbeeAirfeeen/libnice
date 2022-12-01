@@ -47,12 +47,12 @@
 #include "stun/stunagent.h"
 #include "stun/usages/timer.h"
 
-#define NICE_CANDIDATE_PAIR_MAX_FOUNDATION        NICE_CANDIDATE_MAX_FOUNDATION*2
+#define NICE_CANDIDATE_PAIR_MAX_FOUNDATION NICE_CANDIDATE_MAX_FOUNDATION * 2
 
 /* A helper macro to test whether connection checks should continue to be
  * performed after a component has successfully connected */
 #define NICE_AGENT_DO_KEEPALIVE_CONNCHECKS(obj) \
-  ((obj)->consent_freshness || (obj)->keepalive_conncheck || (obj)->compatibility == NICE_COMPATIBILITY_GOOGLE)
+    ((obj)->consent_freshness || (obj)->keepalive_conncheck || (obj)->compatibility == NICE_COMPATIBILITY_GOOGLE)
 
 /**
  * NiceCheckState:
@@ -65,70 +65,66 @@
  *
  * States for checking a candidate pair.
  */
-typedef enum
-{
-  NICE_CHECK_WAITING = 1,
-  NICE_CHECK_IN_PROGRESS,
-  NICE_CHECK_SUCCEEDED,
-  NICE_CHECK_FAILED,
-  NICE_CHECK_FROZEN,
-  NICE_CHECK_DISCOVERED,
+typedef enum {
+    NICE_CHECK_WAITING = 1,
+    NICE_CHECK_IN_PROGRESS,
+    NICE_CHECK_SUCCEEDED,
+    NICE_CHECK_FAILED,
+    NICE_CHECK_FROZEN,
+    NICE_CHECK_DISCOVERED,
 } NiceCheckState;
 
 typedef struct _CandidateCheckPair CandidateCheckPair;
 typedef struct _StunTransaction StunTransaction;
 
-struct _StunTransaction
-{
-  gint64 next_tick;       /* next tick timestamp */
-  StunTimer timer;
-  uint8_t buffer[STUN_MAX_MESSAGE_SIZE_IPV6];
-  StunMessage message;
+struct _StunTransaction {
+    gint64 next_tick; /* next tick timestamp */
+    StunTimer timer;
+    uint8_t buffer[STUN_MAX_MESSAGE_SIZE_IPV6];
+    StunMessage message;
 };
 
-struct _CandidateCheckPair
-{
-  guint stream_id;
-  guint component_id;
-  NiceCandidate *local;
-  NiceCandidate *remote;
-  NiceSocket *sockptr;
-  gchar foundation[NICE_CANDIDATE_PAIR_MAX_FOUNDATION];
-  NiceCheckState state;
-  gboolean nominated;
-  gboolean valid;
-  gboolean use_candidate_on_next_check;
-  gboolean mark_nominated_on_response_arrival;
-  gboolean retransmit;  /* if the first stun request must be retransmitted */
-  CandidateCheckPair *discovered_pair;
-  CandidateCheckPair *succeeded_pair;
-  guint64 priority;
-  guint32 stun_priority;
-  GSList *stun_transactions; /* a list of ongoing stun requests */
+struct _CandidateCheckPair {
+    guint stream_id;
+    guint component_id;
+    NiceCandidate *local;
+    NiceCandidate *remote;
+    struct _NiceSocket *sockptr;
+    gchar foundation[NICE_CANDIDATE_PAIR_MAX_FOUNDATION];
+    NiceCheckState state;
+    gboolean nominated;
+    gboolean valid;
+    gboolean use_candidate_on_next_check;
+    gboolean mark_nominated_on_response_arrival;
+    gboolean retransmit; /* if the first stun request must be retransmitted */
+    CandidateCheckPair *discovered_pair;
+    CandidateCheckPair *succeeded_pair;
+    guint64 priority;
+    guint32 stun_priority;
+    GSList *stun_transactions; /* a list of ongoing stun requests */
 };
 
-int conn_check_add_for_candidate (NiceAgent *agent, guint stream_id, NiceComponent *component, NiceCandidate *remote);
-int conn_check_add_for_local_candidate (NiceAgent *agent, guint stream_id, NiceComponent *component, NiceCandidate *local);
-gboolean conn_check_add_for_candidate_pair (NiceAgent *agent, guint stream_id, NiceComponent *component, NiceCandidate *local, NiceCandidate *remote);
-void conn_check_free (NiceAgent *agent);
-int conn_check_send (NiceAgent *agent, CandidateCheckPair *pair);
-void conn_check_prune_stream (NiceAgent *agent, NiceStream *stream);
-gboolean conn_check_handle_inbound_stun (NiceAgent *agent, NiceStream *stream, NiceComponent *component, NiceSocket *udp_socket, const NiceAddress *from, gchar *buf, guint len);
-gint conn_check_compare (const CandidateCheckPair *a, const CandidateCheckPair *b);
+int conn_check_add_for_candidate(NiceAgent *agent, guint stream_id, NiceComponent *component, NiceCandidate *remote);
+int conn_check_add_for_local_candidate(NiceAgent *agent, guint stream_id, NiceComponent *component, NiceCandidate *local);
+gboolean conn_check_add_for_candidate_pair(NiceAgent *agent, guint stream_id, NiceComponent *component, NiceCandidate *local, NiceCandidate *remote);
+void conn_check_free(NiceAgent *agent);
+int conn_check_send(NiceAgent *agent, CandidateCheckPair *pair);
+void conn_check_prune_stream(NiceAgent *agent, NiceStream *stream);
+gboolean conn_check_handle_inbound_stun(NiceAgent *agent, NiceStream *stream, NiceComponent *component, struct _NiceSocket *udp_socket, const NiceAddress *from, gchar *buf, guint len);
+gint conn_check_compare(const CandidateCheckPair *a, const CandidateCheckPair *b);
 void conn_check_remote_candidates_set(NiceAgent *agent, NiceStream *stream, NiceComponent *component);
 void conn_check_remote_credentials_set(NiceAgent *agent, NiceStream *stream);
-NiceCandidateTransport conn_check_match_transport (NiceCandidateTransport transport);
-void
-conn_check_prune_socket (NiceAgent *agent, NiceStream *stream, NiceComponent *component,
-    NiceSocket *sock);
+NiceCandidateTransport conn_check_match_transport(NiceCandidateTransport transport);
+void conn_check_prune_socket(NiceAgent *agent, NiceStream *stream, NiceComponent *component,
+                             struct _NiceSocket *sock);
 
-void recalculate_pair_priorities (NiceAgent *agent);
-void conn_check_update_selected_pair (NiceAgent *agent,
-    NiceComponent *component, CandidateCheckPair *pair);
-void conn_check_update_check_list_state_for_ready (NiceAgent *agent,
-    NiceStream *stream, NiceComponent *component);
-void conn_check_unfreeze_related (NiceAgent *agent, CandidateCheckPair *pair);
-guint conn_check_stun_transactions_count (NiceAgent *agent);
+void recalculate_pair_priorities(NiceAgent *agent);
+void conn_check_update_selected_pair(NiceAgent *agent,
+                                     NiceComponent *component, CandidateCheckPair *pair);
+void conn_check_update_check_list_state_for_ready(NiceAgent *agent,
+                                                  NiceStream *stream, NiceComponent *component);
+void conn_check_unfreeze_related(NiceAgent *agent, CandidateCheckPair *pair);
+guint conn_check_stun_transactions_count(NiceAgent *agent);
 
 
 #endif /*_NICE_CONNCHECK_H */

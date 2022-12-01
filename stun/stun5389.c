@@ -102,7 +102,7 @@ StunMessageReturn stun_message_append_software (StunMessage *msg,
   const char *ptr = NULL;
 
   if (software == NULL)
-    software = PACKAGE_STRING;
+    software = "libnice";
 
   ptr = software;
   while (*ptr && len < 128) {

@@ -36,8 +36,8 @@
 #ifndef __NICE_IO_STREAM_H__
 #define __NICE_IO_STREAM_H__
 
-#include <glib-object.h>
 #include <gio/gio.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
@@ -45,24 +45,24 @@ G_BEGIN_DECLS
 
 /* IO Stream */
 #define NICE_TYPE_IO_STREAM \
-  (nice_io_stream_get_type ())
-#define NICE_IO_STREAM(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST((obj), NICE_TYPE_IO_STREAM, \
-                              NiceIOStream))
-#define NICE_IO_STREAM_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_CAST((klass), NICE_TYPE_IO_STREAM, \
-                           NiceIOStreamClass))
+    (nice_io_stream_get_type())
+#define NICE_IO_STREAM(obj)                                 \
+    (G_TYPE_CHECK_INSTANCE_CAST((obj), NICE_TYPE_IO_STREAM, \
+                                NiceIOStream))
+#define NICE_IO_STREAM_CLASS(klass)                        \
+    (G_TYPE_CHECK_CLASS_CAST((klass), NICE_TYPE_IO_STREAM, \
+                             NiceIOStreamClass))
 #define NICE_IS_IO_STREAM(obj) \
-  (G_TYPE_CHECK_INSTANCE_TYPE((obj), NICE_TYPE_IO_STREAM))
+    (G_TYPE_CHECK_INSTANCE_TYPE((obj), NICE_TYPE_IO_STREAM))
 #define NICE_IS_IO_STREAM_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_TYPE((klass), NICE_TYPE_IO_STREAM))
-#define NICE_IO_STREAM_GET_CLASS(obj) \
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), NICE_TYPE_IO_STREAM, \
-                              NiceIOStreamClass))
+    (G_TYPE_CHECK_CLASS_TYPE((klass), NICE_TYPE_IO_STREAM))
+#define NICE_IO_STREAM_GET_CLASS(obj)                      \
+    (G_TYPE_INSTANCE_GET_CLASS((obj), NICE_TYPE_IO_STREAM, \
+                               NiceIOStreamClass))
 
 /* IO Stream */
-typedef struct _NiceIOStreamPrivate    NiceIOStreamPrivate;
-typedef struct _NiceIOStreamClass  NiceIOStreamClass;
+typedef struct _NiceIOStreamPrivate NiceIOStreamPrivate;
+typedef struct _NiceIOStreamClass NiceIOStreamClass;
 typedef struct _NiceIOStream NiceIOStream;
 
 #include "agent.h"
@@ -70,21 +70,19 @@ typedef struct _NiceIOStream NiceIOStream;
 #include "outputstream.h"
 
 /* IO Stream */
-GType nice_io_stream_get_type (void);
+GType nice_io_stream_get_type(void);
 
-struct _NiceIOStreamClass
-{
-  GIOStreamClass parent_class;
+struct _NiceIOStreamClass {
+    GIOStreamClass parent_class;
 };
 
-struct _NiceIOStream
-{
-  GIOStream parent_instance;
-  NiceIOStreamPrivate *priv;
+struct _NiceIOStream {
+    GIOStream parent_instance;
+    NiceIOStreamPrivate *priv;
 };
 
-GIOStream *nice_io_stream_new (NiceAgent *agent,
-    guint stream_id, guint component_id);
+GIOStream *nice_io_stream_new(NiceAgent *agent,
+                              guint stream_id, guint component_id);
 
 G_END_DECLS
 

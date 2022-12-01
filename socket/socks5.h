@@ -37,18 +37,17 @@
 #ifndef _SOCKS5_H
 #define _SOCKS5_H
 
-#include "socket.h"
-#include "agent.h"
+#include "agent/agent.h"
+#include "socket/socket.h"
 
 G_BEGIN_DECLS
 
 
 NiceSocket *
-nice_socks5_socket_new (NiceSocket *base_socket,
-    NiceAddress *addr, gchar *username, gchar *password);
+nice_socks5_socket_new(NiceSocket *base_socket,
+                       NiceAddress *addr, gchar *username, gchar *password);
 
 
 G_END_DECLS
 
 #endif /* _SOCKS5_H */
-

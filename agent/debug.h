@@ -89,7 +89,7 @@ G_BEGIN_DECLS
  * - `libnice-pseudotcp`
  * - `libnice-pseudotcp-verbose`
  */
-void nice_debug_enable (gboolean with_stun);
+void nice_debug_enable(gboolean with_stun);
 
 /**
  * nice_debug_disable:
@@ -97,9 +97,8 @@ void nice_debug_enable (gboolean with_stun);
  *
  * Disables libnice debug output to the terminal
  */
-void nice_debug_disable (gboolean with_stun);
+void nice_debug_disable(gboolean with_stun);
 
 G_END_DECLS
 
 #endif /* __LIBNICE_DEBUG_H__ */
-

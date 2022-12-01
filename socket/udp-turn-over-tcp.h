@@ -38,8 +38,8 @@
 #define _UDP_TURN_OVER_TCP_H
 
 #include "socket.h"
-#include "agent.h"
-
+#include "agent/agent.h"
+#include "udp-turn.h"
 G_BEGIN_DECLS
 
 

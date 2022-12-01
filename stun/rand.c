@@ -32,9 +32,8 @@
  */
 
 
-
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #include "rand.h"
@@ -43,33 +42,30 @@
 
 #include <windows.h>
 
-void nice_RAND_nonce (uint8_t *dst, int len)
-{
-  HCRYPTPROV prov;
+void nice_RAND_nonce(uint8_t *dst, int len) {
+    HCRYPTPROV prov;
 
-  CryptAcquireContextW (&prov, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT);
-  CryptGenRandom (prov, len, dst);
-  CryptReleaseContext (prov, 0);
+    CryptAcquireContextW(&prov, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT);
+    CryptGenRandom(prov, len, dst);
+    CryptReleaseContext(prov, 0);
 }
 
 #elif defined(HAVE_OPENSSL)
 
 #include <openssl/rand.h>
 
-void nice_RAND_nonce (uint8_t *dst, int len)
-{
-  RAND_bytes (dst, len);
+void nice_RAND_nonce(uint8_t *dst, int len) {
+    RAND_bytes(dst, len);
 }
 
 #elif defined(HAVE_GNUTLS)
 
-#include <sys/types.h>
-#include <gnutls/gnutls.h>
 #include <gnutls/crypto.h>
+#include <gnutls/gnutls.h>
+#include <sys/types.h>
 
-void nice_RAND_nonce (uint8_t *dst, int len)
-{
-  gnutls_rnd (GNUTLS_RND_NONCE, dst, len);
+void nice_RAND_nonce(uint8_t *dst, int len) {
+    gnutls_rnd(GNUTLS_RND_NONCE, dst, len);
 }
 
 #endif

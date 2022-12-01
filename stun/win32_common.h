@@ -57,9 +57,9 @@
 #ifndef _WIN32_COMMON_H
 #define _WIN32_COMMON_H
 
-#include <sys/types.h>
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <sys/types.h>
 
 /* On MSVC, ssize_t is SSIZE_T */
 #ifdef _MSC_VER

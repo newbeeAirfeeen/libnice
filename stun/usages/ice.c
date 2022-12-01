@@ -53,7 +53,7 @@
 #endif
 
 
-#include "stunagent.h"
+#include "../stunagent.h"
 
 /** ICE connectivity checks **/
 #include "ice.h"

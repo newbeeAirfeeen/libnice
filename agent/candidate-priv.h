@@ -41,8 +41,8 @@
 #ifndef __LIBNICE_CANDIDATE_PRIV_H__
 #define __LIBNICE_CANDIDATE_PRIV_H__
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 
 #include "candidate.h"
 #include "socket/socket.h"
@@ -51,18 +51,18 @@ G_BEGIN_DECLS
 
 
 /* Constants for determining candidate priorities */
-#define NICE_CANDIDATE_TYPE_PREF_HOST                 120
-#define NICE_CANDIDATE_TYPE_PREF_PEER_REFLEXIVE       110
-#define NICE_CANDIDATE_TYPE_PREF_NAT_ASSISTED         105
-#define NICE_CANDIDATE_TYPE_PREF_SERVER_REFLEXIVE     100
-#define NICE_CANDIDATE_TYPE_PREF_RELAYED_UDP           30
-#define NICE_CANDIDATE_TYPE_PREF_RELAYED               20
+#define NICE_CANDIDATE_TYPE_PREF_HOST 120
+#define NICE_CANDIDATE_TYPE_PREF_PEER_REFLEXIVE 110
+#define NICE_CANDIDATE_TYPE_PREF_NAT_ASSISTED 105
+#define NICE_CANDIDATE_TYPE_PREF_SERVER_REFLEXIVE 100
+#define NICE_CANDIDATE_TYPE_PREF_RELAYED_UDP 30
+#define NICE_CANDIDATE_TYPE_PREF_RELAYED 20
 
 /* Priority preference constants for MS-ICE compatibility */
-#define NICE_CANDIDATE_TRANSPORT_MS_PREF_UDP           15
-#define NICE_CANDIDATE_TRANSPORT_MS_PREF_TCP            6
-#define NICE_CANDIDATE_DIRECTION_MS_PREF_PASSIVE        2
-#define NICE_CANDIDATE_DIRECTION_MS_PREF_ACTIVE         5
+#define NICE_CANDIDATE_TRANSPORT_MS_PREF_UDP 15
+#define NICE_CANDIDATE_TRANSPORT_MS_PREF_TCP 6
+#define NICE_CANDIDATE_DIRECTION_MS_PREF_PASSIVE 2
+#define NICE_CANDIDATE_DIRECTION_MS_PREF_ACTIVE 5
 
 typedef struct _NiceCandidateImpl NiceCandidateImpl;
 typedef struct _TurnServer TurnServer;
@@ -82,19 +82,18 @@ typedef struct _TurnServer TurnServer;
  *
  * A structure to store the TURN relay settings
  */
-struct _TurnServer
-{
-  gint ref_count;
+struct _TurnServer {
+    gint ref_count;
 
-  NiceAddress server;
-  gchar *username;
-  gchar *password;
-  guint8 *decoded_username;
-  guint8 *decoded_password;
-  gsize decoded_username_len;
-  gsize decoded_password_len;
-  NiceRelayType type;
-  guint preference;
+    NiceAddress server;
+    gchar *username;
+    gchar *password;
+    guint8 *decoded_username;
+    guint8 *decoded_password;
+    gsize decoded_username_len;
+    gsize decoded_password_len;
+    NiceRelayType type;
+    guint preference;
 };
 
 
@@ -110,13 +109,12 @@ struct _TurnServer
  *
  * A structure to represent an ICE candidate
  */
-struct _NiceCandidateImpl
-{
-  NiceCandidate c;
-  TurnServer *turn;
-  NiceSocket *sockptr;
-  guint64 keepalive_next_tick; /* next tick timestamp */
-  NiceAddress *stun_server;
+struct _NiceCandidateImpl {
+    NiceCandidate c;
+    TurnServer *turn;
+    NiceSocket *sockptr;
+    guint64 keepalive_next_tick; /* next tick timestamp */
+    NiceAddress *stun_server;
 };
 
 

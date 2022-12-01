@@ -35,7 +35,7 @@
  */
 
 #ifndef STUN_UTILS_H
-# define STUN_UTILS_H 1
+#define STUN_UTILS_H 1
 
 /*
  * @file utils.h
@@ -48,32 +48,32 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #else
-#include <sys/types.h>
-#include <sys/socket.h>
 #include <netinet/in.h>
+#include <sys/socket.h>
+#include <sys/types.h>
 #endif
 
-# ifdef __cplusplus
+#ifdef __cplusplus
 extern "C" {
-# endif
+#endif
 
-size_t stun_padding (size_t l);
+size_t stun_padding(size_t l);
 
-size_t stun_align (size_t l);
+size_t stun_align(size_t l);
 
-uint16_t stun_getw (const uint8_t *ptr);
+uint16_t stun_getw(const uint8_t *ptr);
 
-void *stun_setw (uint8_t *ptr, uint16_t value);
+void *stun_setw(uint8_t *ptr, uint16_t value);
 
-void stun_set_type (uint8_t *h, StunClass c, StunMethod m);
+void stun_set_type(uint8_t *h, StunClass c, StunMethod m);
 
-StunMessageReturn stun_xor_address (const StunMessage *msg,
-    struct sockaddr_storage *addr, socklen_t addrlen,
-    uint32_t magic_cookie);
+StunMessageReturn stun_xor_address(const StunMessage *msg,
+                                   struct sockaddr_storage *addr, socklen_t addrlen,
+                                   uint32_t magic_cookie);
 
 
-# ifdef __cplusplus
+#ifdef __cplusplus
 }
-# endif
+#endif
 
 #endif /* STUN_UTILS_H */

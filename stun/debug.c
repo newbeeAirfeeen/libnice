@@ -35,90 +35,85 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "debug.h"
 
 
 static int debug_enabled = 0;
 
-void stun_debug_enable (void) {
-  debug_enabled = 1;
+void stun_debug_enable(void) {
+    debug_enabled = 1;
 }
-void stun_debug_disable (void) {
-  debug_enabled = 0;
+void stun_debug_disable(void) {
+    debug_enabled = 0;
 }
 
-#if     __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
 #define GNUC_PRINTF(format_idx, arg_idx) \
-  __attribute__((__format__ (__printf__, format_idx, arg_idx)))
+    __attribute__((__format__(__printf__, format_idx, arg_idx)))
 #else
-#define GNUC_PRINTF( format_idx, arg_idx)
+#define GNUC_PRINTF(format_idx, arg_idx)
 #endif
 
 static void
-default_handler (const char *format, va_list ap) GNUC_PRINTF (1, 0);
+default_handler(const char *format, va_list ap) GNUC_PRINTF(1, 0);
 
 static void
-default_handler (const char *format, va_list ap)
-{
-  vfprintf (stderr, format, ap);
-  fprintf (stderr, "\n");
+default_handler(const char *format, va_list ap) {
+    vfprintf(stderr, format, ap);
+    fprintf(stderr, "\n");
 }
 
 static StunDebugHandler handler = default_handler;
 
-void stun_debug (const char *fmt, ...)
-{
-  va_list ap;
-  if (debug_enabled) {
-    va_start (ap, fmt);
-    handler (fmt, ap);
-    va_end (ap);
-  }
+void stun_debug(const char *fmt, ...) {
+    va_list ap;
+    if (debug_enabled) {
+        va_start(ap, fmt);
+        handler(fmt, ap);
+        va_end(ap);
+    }
 }
 
-void stun_debug_bytes (const char *prefix, const void *data, size_t len)
-{
-  size_t i;
-  size_t prefix_len = strlen (prefix);
-  char *bytes;
-  char *j;
-  unsigned char k;
-  const char *hex = "0123456789abcdef";
+void stun_debug_bytes(const char *prefix, const void *data, size_t len) {
+    size_t i;
+    size_t prefix_len = strlen(prefix);
+    char *bytes;
+    char *j;
+    unsigned char k;
+    const char *hex = "0123456789abcdef";
 
-  if (!debug_enabled)
-    return;
+    if (!debug_enabled)
+        return;
 
-  bytes = malloc (prefix_len + 2 + (len * 2) + 1);
-  bytes[0] = 0;
-  strcpy (bytes, prefix);
-  strcpy (bytes + prefix_len, "0x");
+    bytes = malloc(prefix_len + 2 + (len * 2) + 1);
+    bytes[0] = 0;
+    strcpy(bytes, prefix);
+    strcpy(bytes + prefix_len, "0x");
 
-  j = bytes + prefix_len + 2;
-  for (i = 0; i < len; i++) {
-    k = ((const unsigned char *)data)[i];
-    j[0] = hex[(k & 0xf0) >> 4];
-    j[1] = hex[k & 0xf];
-    j = j + 2;
-  }
-  j[0] = 0;
-  stun_debug ("%s", bytes);
-  free (bytes);
+    j = bytes + prefix_len + 2;
+    for (i = 0; i < len; i++) {
+        k = ((const unsigned char *) data)[i];
+        j[0] = hex[(k & 0xf0) >> 4];
+        j[1] = hex[k & 0xf];
+        j = j + 2;
+    }
+    j[0] = 0;
+    stun_debug("%s", bytes);
+    free(bytes);
 }
 
 
-void stun_set_debug_handler (StunDebugHandler _handler)
-{
-  if (_handler == NULL)
-    _handler = default_handler;
+void stun_set_debug_handler(StunDebugHandler _handler) {
+    if (_handler == NULL)
+        _handler = default_handler;
 
-  handler = _handler;
+    handler = _handler;
 }
-

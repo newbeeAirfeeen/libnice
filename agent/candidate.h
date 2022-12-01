@@ -41,8 +41,8 @@
 #define __LIBNICE_CANDIDATE_H__
 
 #include "address.h"
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 
 
 /**
@@ -67,14 +67,14 @@ G_BEGIN_DECLS
  *
  * The maximum size a candidate foundation can have.
  */
-#define NICE_CANDIDATE_MAX_FOUNDATION                (32+1)
+#define NICE_CANDIDATE_MAX_FOUNDATION (32 + 1)
 
 /**
  * NICE_CANDIDATE_MAX_TURN_SERVERS
  *
  * The maximum number of turns servers.
  */
-#define NICE_CANDIDATE_MAX_TURN_SERVERS              8
+#define NICE_CANDIDATE_MAX_TURN_SERVERS 8
 
 /**
  * NICE_CANDIDATE_MAX_LOCAL_ADDRESSES
@@ -85,7 +85,7 @@ G_BEGIN_DECLS
  * @NICE_CANDIDATE_MAX_TURN_SERVERS. We choose 6 bits for the number of
  * local addresses, and 3 bits for the number of turn servers.
  */
-#define NICE_CANDIDATE_MAX_LOCAL_ADDRESSES           64
+#define NICE_CANDIDATE_MAX_LOCAL_ADDRESSES 64
 
 /**
  * NiceCandidateType:
@@ -96,12 +96,11 @@ G_BEGIN_DECLS
  *
  * An enum representing the type of a candidate
  */
-typedef enum
-{
-  NICE_CANDIDATE_TYPE_HOST,
-  NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE,
-  NICE_CANDIDATE_TYPE_PEER_REFLEXIVE,
-  NICE_CANDIDATE_TYPE_RELAYED,
+typedef enum {
+    NICE_CANDIDATE_TYPE_HOST,
+    NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE,
+    NICE_CANDIDATE_TYPE_PEER_REFLEXIVE,
+    NICE_CANDIDATE_TYPE_RELAYED,
 } NiceCandidateType;
 
 /**
@@ -113,12 +112,11 @@ typedef enum
  *
  * An enum representing the type of transport to use
  */
-typedef enum
-{
-  NICE_CANDIDATE_TRANSPORT_UDP,
-  NICE_CANDIDATE_TRANSPORT_TCP_ACTIVE,
-  NICE_CANDIDATE_TRANSPORT_TCP_PASSIVE,
-  NICE_CANDIDATE_TRANSPORT_TCP_SO,
+typedef enum {
+    NICE_CANDIDATE_TRANSPORT_UDP,
+    NICE_CANDIDATE_TRANSPORT_TCP_ACTIVE,
+    NICE_CANDIDATE_TRANSPORT_TCP_PASSIVE,
+    NICE_CANDIDATE_TRANSPORT_TCP_SO,
 } NiceCandidateTransport;
 
 /**
@@ -130,9 +128,9 @@ typedef enum
  * An enum representing the type of relay to use
  */
 typedef enum {
-  NICE_RELAY_TYPE_TURN_UDP,
-  NICE_RELAY_TYPE_TURN_TCP,
-  NICE_RELAY_TYPE_TURN_TLS
+    NICE_RELAY_TYPE_TURN_UDP,
+    NICE_RELAY_TYPE_TURN_TCP,
+    NICE_RELAY_TYPE_TURN_TLS
 } NiceRelayType;
 
 
@@ -164,18 +162,17 @@ typedef struct _NiceCandidate NiceCandidate;
    </para>
  </note>
  */
-struct _NiceCandidate
-{
-  NiceCandidateType type;
-  NiceCandidateTransport transport;
-  NiceAddress addr;
-  NiceAddress base_addr;
-  guint32 priority;
-  guint stream_id;
-  guint component_id;
-  gchar foundation[NICE_CANDIDATE_MAX_FOUNDATION];
-  gchar *username;        /* pointer to a nul-terminated username string */
-  gchar *password;        /* pointer to a nul-terminated password string */
+struct _NiceCandidate {
+    NiceCandidateType type;
+    NiceCandidateTransport transport;
+    NiceAddress addr;
+    NiceAddress base_addr;
+    guint32 priority;
+    guint stream_id;
+    guint component_id;
+    gchar foundation[NICE_CANDIDATE_MAX_FOUNDATION];
+    gchar *username; /* pointer to a nul-terminated username string */
+    gchar *password; /* pointer to a nul-terminated password string */
 };
 
 /**
@@ -187,7 +184,7 @@ struct _NiceCandidate
  * Returns: A new #NiceCandidate
  */
 NiceCandidate *
-nice_candidate_new (NiceCandidateType type);
+nice_candidate_new(NiceCandidateType type);
 
 /**
  * nice_candidate_free:
@@ -195,8 +192,7 @@ nice_candidate_new (NiceCandidateType type);
  *
  * Frees a #NiceCandidate
  */
-void
-nice_candidate_free (NiceCandidate *candidate);
+void nice_candidate_free(NiceCandidate *candidate);
 
 /**
  * nice_candidate_copy:
@@ -207,7 +203,7 @@ nice_candidate_free (NiceCandidate *candidate);
  * Returns: A new #NiceCandidate, a copy of @candidate
  */
 NiceCandidate *
-nice_candidate_copy (const NiceCandidate *candidate);
+nice_candidate_copy(const NiceCandidate *candidate);
 
 /**
  * nice_candidate_equal_target:
@@ -222,10 +218,10 @@ nice_candidate_copy (const NiceCandidate *candidate);
  * Since: 0.1.15
  */
 gboolean
-nice_candidate_equal_target (const NiceCandidate *candidate1,
-    const NiceCandidate *candidate2);
+nice_candidate_equal_target(const NiceCandidate *candidate1,
+                            const NiceCandidate *candidate2);
 
-  GType nice_candidate_get_type (void);
+GType nice_candidate_get_type(void);
 
 /**
  * nice_candidate_type_to_string:
@@ -239,7 +235,7 @@ nice_candidate_equal_target (const NiceCandidate *candidate1,
  * Since: 0.1.19
  */
 const gchar *
-nice_candidate_type_to_string (NiceCandidateType type);
+nice_candidate_type_to_string(NiceCandidateType type);
 
 /**
  * nice_candidate_transport_to_string:
@@ -253,7 +249,7 @@ nice_candidate_type_to_string (NiceCandidateType type);
  * Since: 0.1.19
  */
 const gchar *
-nice_candidate_transport_to_string (NiceCandidateTransport transport);
+nice_candidate_transport_to_string(NiceCandidateTransport transport);
 
 /**
  * nice_candidate_relay_address:
@@ -265,8 +261,7 @@ nice_candidate_transport_to_string (NiceCandidateTransport transport);
  *
  * Since: 0.1.19
  */
-void
-nice_candidate_relay_address (const NiceCandidate *candidate, NiceAddress *addr);
+void nice_candidate_relay_address(const NiceCandidate *candidate, NiceAddress *addr);
 
 /**
  * nice_candidate_stun_server_address:
@@ -281,16 +276,15 @@ nice_candidate_relay_address (const NiceCandidate *candidate, NiceAddress *addr)
  * Since: 0.1.20
  */
 gboolean
-nice_candidate_stun_server_address (const NiceCandidate *candidate, NiceAddress *addr);
+nice_candidate_stun_server_address(const NiceCandidate *candidate, NiceAddress *addr);
 
 /**
  * NICE_TYPE_CANDIDATE:
  *
  * A boxed type for a #NiceCandidate.
  */
-#define NICE_TYPE_CANDIDATE nice_candidate_get_type ()
+#define NICE_TYPE_CANDIDATE nice_candidate_get_type()
 
 G_END_DECLS
 
 #endif /* __LIBNICE_CANDIDATE_H__ */
-

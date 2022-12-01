@@ -42,7 +42,7 @@
 
 #include "debug.h"
 
-#include "stunagent.h"
+#include "stun/stunagent.h"
 #include "pseudotcp.h"
 
 #include "agent-priv.h"

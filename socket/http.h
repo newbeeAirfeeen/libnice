@@ -37,19 +37,18 @@
 #ifndef _HTTP_H
 #define _HTTP_H
 
+#include "agent/agent.h"
 #include "socket.h"
-#include "agent.h"
 
 G_BEGIN_DECLS
 
 
 NiceSocket *
-nice_http_socket_new (NiceSocket *base_socket,
-    NiceAddress *addr, gchar *username, gchar *password,
-    GHashTable *extra_headers);
+nice_http_socket_new(NiceSocket *base_socket,
+                     NiceAddress *addr, gchar *username, gchar *password,
+                     GHashTable *extra_headers);
 
 
 G_END_DECLS
 
 #endif /* _HTTP_H */
-

@@ -88,7 +88,7 @@
 
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #include "stuncrc32.h"
@@ -136,27 +136,24 @@ static const uint32_t crc32_tab[] = {
         0x40df0b66, 0x37d83bf0, 0xa9bcae53, 0xdebb9ec5, 0x47b2cf7f, 0x30b5ffe9,
         0xbdbdf21c, 0xcabac28a, 0x53b39330, 0x24b4a3a6, 0xbad03605, 0xcdd70693,
         0x54de5729, 0x23d967bf, 0xb3667a2e, 0xc4614ab8, 0x5d681b02, 0x2a6f2b94,
-        0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d
-};
+        0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d};
 
 
-uint32_t stun_crc32 (const crc_data *data, size_t n, bool wlm2009_stupid_crc32_typo)
-{
-  size_t i;
-  uint32_t crc = 0xffffffff;
+uint32_t stun_crc32(const crc_data *data, size_t n, bool wlm2009_stupid_crc32_typo) {
+    size_t i;
+    uint32_t crc = 0xffffffff;
 
-  for (i = 0; i < n; i++)
-  {
-    const uint8_t *p = data[i].buf;
-    size_t size = data[i].len;
+    for (i = 0; i < n; i++) {
+        const uint8_t *p = data[i].buf;
+        size_t size = data[i].len;
 
-    while (size--) {
-      uint32_t lkp = crc32_tab[(crc ^ *p++) & 0xFF];
-      if (lkp == 0x8bbeb8ea && wlm2009_stupid_crc32_typo)
-        lkp = 0x8bbe8ea;
-      crc =  lkp ^ (crc >> 8);
+        while (size--) {
+            uint32_t lkp = crc32_tab[(crc ^ *p++) & 0xFF];
+            if (lkp == 0x8bbeb8ea && wlm2009_stupid_crc32_typo)
+                lkp = 0x8bbe8ea;
+            crc = lkp ^ (crc >> 8);
+        }
     }
-  }
 
-  return crc ^ 0xffffffff;
+    return crc ^ 0xffffffff;
 }

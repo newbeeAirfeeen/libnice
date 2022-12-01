@@ -36,7 +36,7 @@
  * file under either the MPL or the LGPL.
  */
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #include <string.h>
@@ -48,143 +48,132 @@
 static volatile unsigned int n_streams_created = 0;
 static volatile unsigned int n_streams_destroyed = 0;
 
-G_DEFINE_TYPE (NiceStream, nice_stream, G_TYPE_OBJECT);
+G_DEFINE_TYPE(NiceStream, nice_stream, G_TYPE_OBJECT);
 
 static void
-nice_stream_finalize (GObject *obj);
+nice_stream_finalize(GObject *obj);
 
 /*
  * @file stream.c
  * @brief ICE stream functionality
  */
 NiceStream *
-nice_stream_new (guint stream_id, guint n_components, NiceAgent *agent)
-{
-  NiceStream *stream = NULL;
-  guint n;
+nice_stream_new(guint stream_id, guint n_components, NiceAgent *agent) {
+    NiceStream *stream = NULL;
+    guint n;
 
-  stream = g_object_new (NICE_TYPE_STREAM, NULL);
+    stream = g_object_new(NICE_TYPE_STREAM, NULL);
 
-  stream->id = stream_id;
+    stream->id = stream_id;
 
-  /* Create the components. */
-  for (n = 0; n < n_components; n++) {
-    NiceComponent *component = NULL;
+    /* Create the components. */
+    for (n = 0; n < n_components; n++) {
+        NiceComponent *component = NULL;
 
-    component = nice_component_new (n + 1, agent, stream);
-    stream->components = g_slist_append (stream->components, component);
-  }
+        component = nice_component_new(n + 1, agent, stream);
+        stream->components = g_slist_append(stream->components, component);
+    }
 
-  stream->n_components = n_components;
+    stream->n_components = n_components;
 
-  stream->peer_gathering_done = !agent->use_ice_trickle;
+    stream->peer_gathering_done = !agent->use_ice_trickle;
 
-  return stream;
+    return stream;
 }
 
-void
-nice_stream_close (NiceAgent *agent, NiceStream *stream)
-{
-  GSList *i;
+void nice_stream_close(NiceAgent *agent, NiceStream *stream) {
+    GSList *i;
 
-  for (i = stream->components; i; i = i->next) {
-    NiceComponent *component = i->data;
-    nice_component_close (agent, stream, component);
-  }
+    for (i = stream->components; i; i = i->next) {
+        NiceComponent *component = i->data;
+        nice_component_close(agent, stream, component);
+    }
 }
 
 NiceComponent *
-nice_stream_find_component_by_id (NiceStream *stream, guint id)
-{
-  GSList *i;
+nice_stream_find_component_by_id(NiceStream *stream, guint id) {
+    GSList *i;
 
-  for (i = stream->components; i; i = i->next) {
-    NiceComponent *component = i->data;
-    if (component && component->id == id)
-      return component;
-  }
+    for (i = stream->components; i; i = i->next) {
+        NiceComponent *component = i->data;
+        if (component && component->id == id)
+            return component;
+    }
 
-  return NULL;
+    return NULL;
 }
 
 /*
  * Initialized the local crendentials for the stream.
  */
-void
-nice_stream_initialize_credentials (NiceStream *stream, NiceRNG *rng)
-{
-  /* note: generate ufrag/pwd for the stream (see ICE 15.4.
+void nice_stream_initialize_credentials(NiceStream *stream, NiceRNG *rng) {
+    /* note: generate ufrag/pwd for the stream (see ICE 15.4.
    *       '"ice-ufrag" and "ice-pwd" Attributes', ID-19) */
-  nice_rng_generate_bytes_print (rng, NICE_STREAM_DEF_UFRAG - 1, stream->local_ufrag);
-  nice_rng_generate_bytes_print (rng, NICE_STREAM_DEF_PWD - 1, stream->local_password);
+    nice_rng_generate_bytes_print(rng, NICE_STREAM_DEF_UFRAG - 1, stream->local_ufrag);
+    nice_rng_generate_bytes_print(rng, NICE_STREAM_DEF_PWD - 1, stream->local_password);
 
-  /* reset remote credentials, because we cannot assume that we'll
+    /* reset remote credentials, because we cannot assume that we'll
    * receive new remote credentials from the SDP before the conncheck
    * restarts with new inbound STUN requests
    */
-  stream->remote_ufrag[0] = 0;
-  stream->remote_password[0] = 0;
+    stream->remote_ufrag[0] = 0;
+    stream->remote_password[0] = 0;
 }
 
 /*
  * Resets the stream state to that of a ICE restarted
  * session.
  */
-void
-nice_stream_restart (NiceStream *stream, NiceAgent *agent)
-{
-  GSList *i;
+void nice_stream_restart(NiceStream *stream, NiceAgent *agent) {
+    GSList *i;
 
-  /* step: clean up all connectivity checks */
-  conn_check_prune_stream (agent, stream);
+    /* step: clean up all connectivity checks */
+    conn_check_prune_stream(agent, stream);
 
-  stream->initial_binding_request_received = FALSE;
+    stream->initial_binding_request_received = FALSE;
 
-  nice_stream_initialize_credentials (stream, agent->rng);
+    nice_stream_initialize_credentials(stream, agent->rng);
 
-  for (i = stream->components; i; i = i->next) {
-    NiceComponent *component = i->data;
+    for (i = stream->components; i; i = i->next) {
+        NiceComponent *component = i->data;
 
-    nice_component_restart (component, agent);
-    agent_signal_component_state_change (agent,
-        stream->id, component->id, NICE_COMPONENT_STATE_GATHERING);
-  }
+        nice_component_restart(component, agent);
+        agent_signal_component_state_change(agent,
+                                            stream->id, component->id, NICE_COMPONENT_STATE_GATHERING);
+    }
 }
 
 static void
-nice_stream_class_init (NiceStreamClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+nice_stream_class_init(NiceStreamClass *klass) {
+    GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
-  object_class->finalize = nice_stream_finalize;
+    object_class->finalize = nice_stream_finalize;
 }
 
 static void
-nice_stream_init (NiceStream *stream)
-{
-  g_atomic_int_inc (&n_streams_created);
-  nice_debug ("Created NiceStream (%u created, %u destroyed)",
-      n_streams_created, n_streams_destroyed);
+nice_stream_init(NiceStream *stream) {
+    g_atomic_int_inc(&n_streams_created);
+    nice_debug("Created NiceStream (%u created, %u destroyed)",
+               n_streams_created, n_streams_destroyed);
 
-  stream->n_components = 0;
-  stream->initial_binding_request_received = FALSE;
+    stream->n_components = 0;
+    stream->initial_binding_request_received = FALSE;
 }
 
 /* Must be called with the agent lock released as it could dispose of
  * NiceIOStreams. */
 static void
-nice_stream_finalize (GObject *obj)
-{
-  NiceStream *stream;
+nice_stream_finalize(GObject *obj) {
+    NiceStream *stream;
 
-  stream = NICE_STREAM (obj);
+    stream = NICE_STREAM(obj);
 
-  g_free (stream->name);
-  g_slist_free_full (stream->components, (GDestroyNotify) g_object_unref);
+    g_free(stream->name);
+    g_slist_free_full(stream->components, (GDestroyNotify) g_object_unref);
 
-  g_atomic_int_inc (&n_streams_destroyed);
-  nice_debug ("Destroyed NiceStream (%u created, %u destroyed)",
-      n_streams_created, n_streams_destroyed);
+    g_atomic_int_inc(&n_streams_destroyed);
+    nice_debug("Destroyed NiceStream (%u created, %u destroyed)",
+               n_streams_created, n_streams_destroyed);
 
-  G_OBJECT_CLASS (nice_stream_parent_class)->finalize (obj);
+    G_OBJECT_CLASS(nice_stream_parent_class)->finalize(obj);
 }

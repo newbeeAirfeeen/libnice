@@ -41,136 +41,134 @@
 
 /* note: this is a private header to libnice */
 
-#include "stream.h"
 #include "agent.h"
 #include "candidate-priv.h"
+#include "stream.h"
 
 typedef struct
 {
-  NiceCandidateType type;   /* candidate type STUN or TURN */
-  NiceSocket *nicesock;  /* XXX: should be taken from local cand: existing socket to use */
-  NiceAddress server;       /* STUN/TURN server address */
-  gint64 next_tick;       /* next tick timestamp */
-  gboolean pending;         /* is discovery in progress? */
-  gboolean done;            /* is discovery complete? */
-  guint stream_id;
-  guint component_id;
-  TurnServer *turn;
-  StunAgent stun_agent;
-  StunTimer timer;
-  uint8_t stun_buffer[STUN_MAX_MESSAGE_SIZE_IPV6];
-  StunMessage stun_message;
-  uint8_t stun_resp_buffer[STUN_MAX_MESSAGE_SIZE];
-  StunMessage stun_resp_msg;
+    NiceCandidateType type; /* candidate type STUN or TURN */
+    NiceSocket *nicesock;   /* XXX: should be taken from local cand: existing socket to use */
+    NiceAddress server;     /* STUN/TURN server address */
+    gint64 next_tick;       /* next tick timestamp */
+    gboolean pending;       /* is discovery in progress? */
+    gboolean done;          /* is discovery complete? */
+    guint stream_id;
+    guint component_id;
+    TurnServer *turn;
+    StunAgent stun_agent;
+    StunTimer timer;
+    uint8_t stun_buffer[STUN_MAX_MESSAGE_SIZE_IPV6];
+    StunMessage stun_message;
+    uint8_t stun_resp_buffer[STUN_MAX_MESSAGE_SIZE];
+    StunMessage stun_resp_msg;
 } CandidateDiscovery;
 
 typedef struct
 {
-  NiceSocket *nicesock;     /* existing socket to use */
-  NiceAddress server;       /* STUN/TURN server address */
-  NiceCandidateImpl *candidate; /* candidate to refresh */
-  guint stream_id;
-  guint component_id;
-  StunAgent stun_agent;
-  GSource *timer_source;
-  GSource *tick_source;
-  StunTimer timer;
-  uint8_t stun_buffer[STUN_MAX_MESSAGE_SIZE_IPV6];
-  StunMessage stun_message;
-  uint8_t stun_resp_buffer[STUN_MAX_MESSAGE_SIZE];
-  StunMessage stun_resp_msg;
+    NiceSocket *nicesock;         /* existing socket to use */
+    NiceAddress server;           /* STUN/TURN server address */
+    NiceCandidateImpl *candidate; /* candidate to refresh */
+    guint stream_id;
+    guint component_id;
+    StunAgent stun_agent;
+    GSource *timer_source;
+    GSource *tick_source;
+    StunTimer timer;
+    uint8_t stun_buffer[STUN_MAX_MESSAGE_SIZE_IPV6];
+    StunMessage stun_message;
+    uint8_t stun_resp_buffer[STUN_MAX_MESSAGE_SIZE];
+    StunMessage stun_resp_msg;
 
-  gboolean disposing;
-  GDestroyNotify destroy_cb;
-  gpointer destroy_cb_data;
-  GSource *destroy_source;
+    gboolean disposing;
+    GDestroyNotify destroy_cb;
+    gpointer destroy_cb_data;
+    GSource *destroy_source;
 } CandidateRefresh;
 
-void refresh_free (NiceAgent *agent, CandidateRefresh *refresh);
-void refresh_prune_agent_async (NiceAgent *agent,
-  NiceTimeoutLockedCallback function, gpointer user_data);
-void refresh_prune_stream_async (NiceAgent *agent, NiceStream *stream,
-  NiceTimeoutLockedCallback function);
-void refresh_prune_candidate (NiceAgent *agent, NiceCandidateImpl *candidate);
-void refresh_prune_candidate_async (NiceAgent *agent, NiceCandidateImpl *cand,
-  NiceTimeoutLockedCallback function);
-void refresh_prune_socket (NiceAgent *agent, NiceSocket *nicesock);
+void refresh_free(NiceAgent *agent, CandidateRefresh *refresh);
+void refresh_prune_agent_async(NiceAgent *agent,
+                               NiceTimeoutLockedCallback function, gpointer user_data);
+void refresh_prune_stream_async(NiceAgent *agent, NiceStream *stream,
+                                NiceTimeoutLockedCallback function);
+void refresh_prune_candidate(NiceAgent *agent, NiceCandidateImpl *candidate);
+void refresh_prune_candidate_async(NiceAgent *agent, NiceCandidateImpl *cand,
+                                   NiceTimeoutLockedCallback function);
+void refresh_prune_socket(NiceAgent *agent, NiceSocket *nicesock);
 
 
-void discovery_free (NiceAgent *agent);
-void discovery_prune_stream (NiceAgent *agent, guint stream_id);
-void discovery_prune_socket (NiceAgent *agent, NiceSocket *sock);
-void discovery_schedule (NiceAgent *agent);
+void discovery_free(NiceAgent *agent);
+void discovery_prune_stream(NiceAgent *agent, guint stream_id);
+void discovery_prune_socket(NiceAgent *agent, NiceSocket *sock);
+void discovery_schedule(NiceAgent *agent);
 
 typedef enum {
-  HOST_CANDIDATE_SUCCESS,
-  HOST_CANDIDATE_FAILED,
-  HOST_CANDIDATE_CANT_CREATE_SOCKET,
-  HOST_CANDIDATE_REDUNDANT,
-  HOST_CANDIDATE_DUPLICATE_PORT
+    HOST_CANDIDATE_SUCCESS,
+    HOST_CANDIDATE_FAILED,
+    HOST_CANDIDATE_CANT_CREATE_SOCKET,
+    HOST_CANDIDATE_REDUNDANT,
+    HOST_CANDIDATE_DUPLICATE_PORT
 } HostCandidateResult;
 
 HostCandidateResult
-discovery_add_local_host_candidate (
-  NiceAgent *agent,
-  guint stream_id,
-  guint component_id,
-  NiceAddress *address,
-  NiceCandidateTransport transport,
-  gboolean accept_duplicate,
-  NiceCandidateImpl **candidate);
+discovery_add_local_host_candidate(
+        NiceAgent *agent,
+        guint stream_id,
+        guint component_id,
+        NiceAddress *address,
+        NiceCandidateTransport transport,
+        gboolean accept_duplicate,
+        NiceCandidateImpl **candidate);
 
-NiceCandidateImpl*
-discovery_add_relay_candidate (
-  NiceAgent *agent,
-  guint stream_id,
-  guint component_id,
-  NiceAddress *address,
-  NiceCandidateTransport transport,
-  NiceSocket *base_socket,
-  TurnServer *turn,
-  uint32_t *lifetime);
+NiceCandidateImpl *
+discovery_add_relay_candidate(
+        NiceAgent *agent,
+        guint stream_id,
+        guint component_id,
+        NiceAddress *address,
+        NiceCandidateTransport transport,
+        NiceSocket *base_socket,
+        TurnServer *turn,
+        uint32_t *lifetime);
 
-void
-discovery_add_server_reflexive_candidate (
-  NiceAgent *agent,
-  guint stream_id,
-  guint component_id,
-  NiceAddress *address,
-  NiceCandidateTransport transport,
-  NiceSocket *base_socket,
-  const NiceAddress *server_address,
-  gboolean nat_assisted);
+void discovery_add_server_reflexive_candidate(
+        NiceAgent *agent,
+        guint stream_id,
+        guint component_id,
+        NiceAddress *address,
+        NiceCandidateTransport transport,
+        NiceSocket *base_socket,
+        const NiceAddress *server_address,
+        gboolean nat_assisted);
 
-void
-discovery_discover_tcp_server_reflexive_candidates (
-  NiceAgent *agent,
-  guint stream_id,
-  guint component_id,
-  NiceAddress *address,
-  NiceSocket *base_socket,
-  const NiceAddress *server_address);
-
-NiceCandidate*
-discovery_add_peer_reflexive_candidate (
-  NiceAgent *agent,
-  guint stream_id,
-  guint component_id,
-  guint32 priority,
-  NiceAddress *address,
-  NiceSocket *base_socket,
-  NiceCandidate *local,
-  NiceCandidate *remote);
+void discovery_discover_tcp_server_reflexive_candidates(
+        NiceAgent *agent,
+        guint stream_id,
+        guint component_id,
+        NiceAddress *address,
+        NiceSocket *base_socket,
+        const NiceAddress *server_address);
 
 NiceCandidate *
-discovery_learn_remote_peer_reflexive_candidate (
-  NiceAgent *agent,
-  NiceStream *stream,
-  NiceComponent *component,
-  guint32 priority, 
-  const NiceAddress *remote_address,
-  NiceSocket *udp_socket,
-  NiceCandidate *local,
-  NiceCandidate *remote);
+discovery_add_peer_reflexive_candidate(
+        NiceAgent *agent,
+        guint stream_id,
+        guint component_id,
+        guint32 priority,
+        NiceAddress *address,
+        NiceSocket *base_socket,
+        NiceCandidate *local,
+        NiceCandidate *remote);
+
+NiceCandidate *
+discovery_learn_remote_peer_reflexive_candidate(
+        NiceAgent *agent,
+        NiceStream *stream,
+        NiceComponent *component,
+        guint32 priority,
+        const NiceAddress *remote_address,
+        NiceSocket *udp_socket,
+        NiceCandidate *local,
+        NiceCandidate *remote);
 
 #endif /*_NICE_CONNCHECK_H */

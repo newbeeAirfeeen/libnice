@@ -66,7 +66,7 @@
 #include <sys/socket.h>
 #endif
 
-# include "stun/stunagent.h"
+# include "../stunagent.h"
 
 # ifdef __cplusplus
 extern "C" {
