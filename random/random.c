@@ -37,35 +37,32 @@
  * file under either the MPL or the LGPL.
  */
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include "config.h"
 #endif
 
 #include <string.h>
 
-#include "random.h"
 #include "random-glib.h"
+#include "random.h"
 
-static NiceRNG * (*nice_rng_new_func) (void) = NULL;
+static NiceRNG *(*nice_rng_new_func)(void) = NULL;
 
 /* 
  * Creates a new random number generator instance.
  */
 NiceRNG *
-nice_rng_new (void)
-{
-  if (nice_rng_new_func == NULL)
-    return nice_rng_glib_new ();
-  else
-    return nice_rng_new_func ();
+nice_rng_new(void) {
+    if (nice_rng_new_func == NULL)
+        return nice_rng_glib_new();
+    else
+        return nice_rng_new_func();
 }
 
 /*
  * Sets a new generator function.
  */
-void
-nice_rng_set_new_func (NiceRNG * (*func) (void))
-{
-  nice_rng_new_func = func;
+void nice_rng_set_new_func(NiceRNG *(*func)(void) ) {
+    nice_rng_new_func = func;
 }
 
 /*
@@ -73,10 +70,8 @@ nice_rng_set_new_func (NiceRNG * (*func) (void))
  *
  * @param rng context
  */
-void
-nice_rng_free (NiceRNG *rng)
-{
-  rng->free (rng);
+void nice_rng_free(NiceRNG *rng) {
+    rng->free(rng);
 }
 
 /*
@@ -86,10 +81,8 @@ nice_rng_free (NiceRNG *rng)
  * @param len number of octets to product
  * @param buf buffer to store the results
  */
-void
-nice_rng_generate_bytes (NiceRNG *rng, guint len, gchar *buf)
-{
-  rng->generate_bytes (rng, len, buf);
+void nice_rng_generate_bytes(NiceRNG *rng, guint len, gchar *buf) {
+    rng->generate_bytes(rng, len, buf);
 }
 
 /*
@@ -99,10 +92,8 @@ nice_rng_generate_bytes (NiceRNG *rng, guint len, gchar *buf)
  * @param low closed lower bound
  * @param high open upper bound
  */
-guint
-nice_rng_generate_int (NiceRNG *rng, guint low, guint high)
-{
-  return rng->generate_int (rng, low, high);
+guint nice_rng_generate_int(NiceRNG *rng, guint low, guint high) {
+    return rng->generate_int(rng, low, high);
 }
 
 /*
@@ -116,17 +107,14 @@ nice_rng_generate_int (NiceRNG *rng, guint low, guint high)
  * @param len number of octets to product
  * @param buf buffer to store the results
  */
-void
-nice_rng_generate_bytes_print (NiceRNG *rng, guint len, gchar *buf)
-{
-  guint i;
-  const gchar *chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    "abcdefghijklmnopqrstuvwxyz"
-    "0123456789"
-    "+/";
+void nice_rng_generate_bytes_print(NiceRNG *rng, guint len, gchar *buf) {
+    guint i;
+    const gchar *chars =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            "abcdefghijklmnopqrstuvwxyz"
+            "0123456789"
+            "+/";
 
-  for (i = 0; i < len; i++)
-    buf[i] = chars[nice_rng_generate_int (rng, 0, strlen (chars))];
+    for (i = 0; i < len; i++)
+        buf[i] = chars[nice_rng_generate_int(rng, 0, strlen(chars))];
 }
-
