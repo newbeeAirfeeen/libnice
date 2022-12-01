@@ -42,7 +42,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <agent.h>
+#include <agent/agent.h>
 
 #include <gio/gnetworking.h>
 
