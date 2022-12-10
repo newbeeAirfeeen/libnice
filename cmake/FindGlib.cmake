@@ -30,9 +30,18 @@ find_library(Glib_LIBRARY
         PATHS ${Glib_PKGCONF_LIBRARY_DIRS}
         )
 
+find_library(GIO_LIBRARY
+        NAMES gio-2.0
+        PATHS ${Glib_PKGCONF_LIBRARY_DIRS}
+        )
+
+find_library(GOBJECT_LIBRARY
+        NAMES gobject-2.0
+        PATHS ${Glib_PKGCONF_LIBRARY_DIRS}
+        )
 
 set(Glib_PROCESS_INCLUDES ${Glib_INCLUDE_DIR} ${GlibConfig_INCLUDE_DIR})
-set(Glib_PROCESS_LIBS ${Glib_LIBRARY})
+set(Glib_PROCESS_LIBS ${Glib_LIBRARY} ${GIO_LIBRARY} ${GOBJECT_LIBRARY})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Glib DEFAULT_MSG

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(libnice C)
 
-option(ENABLE_MBEDTLS "enable mbedtls library" OFF)
+#option(ENABLE_MBEDTLS "enable mbedtls library" OFF)
 option(ENABLE_EXAMPLE "enable example for ice" ON)
 
 
